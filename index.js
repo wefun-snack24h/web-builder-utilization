@@ -1,20 +1,17 @@
-function handleOpenInNewTab(url) {
-  window.open(url, '_blank')
-}
-
-function handleChangeLinkOfCurrentTab(url) {
-  window.location.href = url
-}
+/**
+ * @file
+ * 여기에 설명이 들어감
+ */
 
 /**
  *
- * @type {{}} WebBuilder - 아임웹 공통 모듈
+ * @namespace {{}} WebBuilder - 아임웹 공통 모듈
  */
 var WebBuilder = {}
 
 /**
  * 메시지 통신 관련 함수
- * @type {{}} handleMessage - 메시지 통신 관련 함수
+ * @module {{}} handleMessage - 메시지 통신 관련 함수
  */
 WebBuilder.handleMessage = {}
 
@@ -53,11 +50,11 @@ WebBuilder.handleMessage.sendMessage = function (targetWindow, message,
  * 메시지 수신 함수
  * @param {(args: any) => void} callbackFunc - 메시지 수신시 실행할 콜백 함수
  * @param {string} messageKey - 메시지 수신시 분류를 위한 키값
- * @param {boolean | AddEventListenerOptions | undefined} eventOptions - message 이벤트 옵션
  * @param {Window | globalThis} targetWindow - 메시지를 받을 타겟 윈도우 (기본값: window)
+ * @param {boolean | AddEventListenerOptions | undefined} eventOptions - message 이벤트 옵션
  */
 WebBuilder.handleMessage.receiveMessage = function (callbackFunc, messageKey,
-    eventOptions = undefined, targetWindow = window) {
+    targetWindow = window, eventOptions = undefined,) {
   targetWindow.addEventListener('message', function (event) {
     console.log('receiveMessage', event.data)
     if (event.data.key === messageKey) {
@@ -79,11 +76,11 @@ WebBuilder.handleMessage.sendReturnMessage = function (targetWindow,
 
 /**
  * 메시지를 보낸 프레임에서 메시지를 보낸 곳으로부터 메시지 수신여부를 받았을 때 지속적으로 보내던 sendMessage timer를 종료함
- * @param {*} eventOptions - message 이벤트 옵션
  * @param {Window | globalThis} targetWindow - 메시지를 받을 타겟 윈도우 (기본값: window)
+ * @param {boolean | AddEventListenerOptions | undefined} eventOptions - message 이벤트 옵션
  */
-WebBuilder.handleMessage.receiveReturnMessage = function (eventOptions = undefined,
-    targetWindow = window) {
+WebBuilder.handleMessage.receiveReturnMessage = function (targetWindow = window,
+    eventOptions = undefined) {
   targetWindow.addEventListener('message', function (event) {
     console.log('receiveReturnMessage', event.data)
     if (event.data.key === 'frameReturnMessage') {
@@ -95,21 +92,35 @@ WebBuilder.handleMessage.receiveReturnMessage = function (eventOptions = undefin
 /**
  * 메시지로 받은 정보를 session storage에 담음
  * key는 필수값
- * @param {object | any} message
+ * @param {string} messageKey
+ * @param {object} messageObj
  */
-WebBuilder.handleMessage.saveMessageInSessionStorage = function (message) {
-  const saveData = JSON.stringify(message)
-  console.log('saveMessageInSessionStorage: ', message.key, saveData)
-  sessionStorage.setItem(message.key, saveData)
+WebBuilder.handleMessage.saveMessageInSessionStorage = function (messageKey,
+    messageObj) {
+  const saveData = JSON.stringify(messageObj)
+  console.log('saveMessageInSessionStorage: ', messageKey, saveData)
+  sessionStorage.setItem(messageKey, saveData)
 }
 
 /**
  * session storage 에서 key로 정보를 꺼내옴
  * @param {string} messageKey - 메시지 정보를 꺼내올 key값
- * @return {any | null} - parcing한 메시지 정보
+ * @return {object | null} - parcing한 메시지 정보
  */
 WebBuilder.handleMessage.getMessageInSessionStorage = function (messageKey) {
   const sessionData = sessionStorage.getItem(messageKey)
   console.log('getMessageInSessionStorage: ', messageKey, sessionData)
   return sessionData ? JSON.parse(sessionData) : null
+}
+
+/**
+ *
+ * @param url
+ */
+WebBuilder.handleOpenInNewTab = function (url) {
+  window.open(url, '_blank')
+}
+
+WebBuilder.handleChangeLinkOfCurrentTab = function (url) {
+  window.location.href = url
 }
