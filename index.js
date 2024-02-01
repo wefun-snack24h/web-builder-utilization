@@ -1,10 +1,11 @@
 /**
- * @file
- * 아임웹에서 사용할 공통 모듈로 아래와 같은 모듈을 가지고 있음
- * - 메시지 통신관련 모듈: handleMessage
- * - 탈리 관련 모듈: handleTally
- * - 페이지 새탭, 현재탭 전환 관련 함수: handleOpen ...
- * - gtm 태깅 함수
+ * @file 아임웹 등 웹빌더 공통 모듈 생성 파일
+ * @module WEFUN 아임웹 등 웹빌더 공통 모듈
+ * @module handleMessage 메시지 통신관련 모듈
+ * @module handleTally 탈리 관련 모듈
+ * @module handleOpenInNewTab 페이지 새탭 오픈 함수
+ * @module handleChangeLinkOfCurrentTab 페이지 현재탭 전환 함수
+ * @module handleGtmTagging gtm 태깅 함수
  */
 
 (function (_) {
