@@ -124,3 +124,21 @@ WebBuilder.handleOpenInNewTab = function (url) {
 WebBuilder.handleChangeLinkOfCurrentTab = function (url) {
   window.location.href = url
 }
+
+/**
+ * gtm tagging
+ * @param {string} eventName - 이벤트명
+ * @param {Object} params - tagging 할 데이어들
+ * */
+WebBuilder.handleGtmTagging = function (eventName, params) {
+  try {
+    window.dataLayer = window.dataLayer || []
+    let tag = {event: eventName}
+    tag = Object.assign(tag, params)
+    dataLayer.push(tag)
+
+    console.log(`%c[GoogleTagManager]`, 'background: #ffcc4d; color: #000; font-weight: 700;', tag)
+  } catch (e) {
+    console.log(`[handleGtmTagging]: ${e}`);
+  }
+}
