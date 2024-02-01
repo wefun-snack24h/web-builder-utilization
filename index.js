@@ -180,8 +180,7 @@
             throw new Error('SITE is not found')
           }
           if (!_.SITE.openModalMenu) {
-            throw new Error(
-                'SITE.openModalMenu is not found')
+            throw new Error('SITE.openModalMenu is not found')
           }
 
           _.SITE.openModalMenu(modalId)
@@ -200,23 +199,23 @@
             throw new Error('SITE is not found')
           }
           if (!_.SITE.openModalMenu) {
-            throw new Error(
-                'SITE.openModalMenu is not found')
+            throw new Error('SITE.openModalMenu is not found')
           }
 
           _.SITE.openModalMenu(modalId)
 
           let args = arguments;
-          clearTimeoutId()
-          timeoutId = setTimeout(() => {
-            let iframe = document.getElementById("tally-3jl6bQ")
-            let params = args?.reduce((acc, curr) => acc + curr + "&", '&')
-                ?? ''
-            if (iframe) {
-              iframe.src += params;
-            }
+          if (!!args?.length) {
             clearTimeoutId()
-          }, 500)
+            timeoutId = setTimeout(() => {
+              let iframe = document.getElementById("tally-3jl6bQ")
+              let params = "&" + args.join("&")
+              if (iframe) {
+                iframe.src += params;
+              }
+              clearTimeoutId()
+            }, 500)
+          }
         } catch (e) {
           errorLog(e)
         }
