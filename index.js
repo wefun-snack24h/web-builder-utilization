@@ -1,6 +1,10 @@
 /**
  * @file
- * 여기에 설명이 들어감
+ * 아임웹에서 사용할 공통 모듈로 아래와 같은 모듈을 가지고 있음
+ * - 메시지 통신관련 모듈: handleMessage
+ * - 탈리 관련 모듈: handleTally
+ * - 페이지 새탭, 현재탭 전환 관련 함수: handleOpen ...
+ * - gtm 태깅 함수
  */
 
 /**
@@ -16,7 +20,7 @@ var WebBuilder = {}
 WebBuilder.handleMessage = {}
 
 /**
- * @type {NodeJS.Timer | null} intervalId - setInterval 생성시 intervalId 담아두고 추후 clear 처리
+ * @type {number | null} intervalId - setInterval 생성시 intervalId 담아두고 추후 clear 처리
  */
 WebBuilder.handleMessage.intervalId = null
 
@@ -40,6 +44,7 @@ WebBuilder.handleMessage.clearTimer = function () {
  */
 WebBuilder.handleMessage.sendMessage = function (targetWindow, message,
     origin = '*', options = undefined) {
+  // 기존에 interval이 돌고 있는 경우 종료해주고 실행
   WebBuilder.handleMessage.clearTimer()
   this.intervalId = setInterval(() => {
     targetWindow.postMessage(message, origin, options)
@@ -54,13 +59,15 @@ WebBuilder.handleMessage.sendMessage = function (targetWindow, message,
  * @param {boolean | AddEventListenerOptions | undefined} eventOptions - message 이벤트 옵션
  */
 WebBuilder.handleMessage.receiveMessage = function (callbackFunc, messageKey,
-    targetWindow = window, eventOptions = undefined,) {
-  targetWindow.addEventListener('message', function (event) {
+    targetWindow = window, eventOptions = undefined) {
+  function messageListener(event) {
     console.log('receiveMessage', event.data)
     if (event.data.key === messageKey) {
       callbackFunc(event)
     }
-  }, eventOptions)
+  }
+
+  targetWindow.addEventListener('message', messageListener, eventOptions)
 }
 
 /**
@@ -81,12 +88,15 @@ WebBuilder.handleMessage.sendReturnMessage = function (targetWindow,
  */
 WebBuilder.handleMessage.receiveReturnMessage = function (targetWindow = window,
     eventOptions = undefined) {
-  targetWindow.addEventListener('message', function (event) {
+  function messageListener(event) {
     console.log('receiveReturnMessage', event.data)
-    if (event.data.key === 'frameReturnMessage') {
+    if (event.data.key
+        === 'frameReturnMessage') {
       WebBuilder.handleMessage.clearTimer()
     }
-  }, eventOptions)
+  }
+
+  targetWindow.addEventListener('message', messageListener, eventOptions)
 }
 
 /**
@@ -97,30 +107,141 @@ WebBuilder.handleMessage.receiveReturnMessage = function (targetWindow = window,
  */
 WebBuilder.handleMessage.saveMessageInSessionStorage = function (messageKey,
     messageObj) {
-  const saveData = JSON.stringify(messageObj)
-  console.log('saveMessageInSessionStorage: ', messageKey, saveData)
-  sessionStorage.setItem(messageKey, saveData)
+  try {
+    const saveData = JSON.stringify(messageObj)
+    console.log('saveMessageInSessionStorage: ', messageKey, saveData)
+    sessionStorage.setItem(messageKey, saveData)
+  } catch (e) {
+    console.log('An unexpected error occurred: ', e.message)
+  }
 }
 
 /**
- * session storage 에서 key로 정보를 꺼내옴
+ * session storage 에서 messageKey 로 정보를 가져옴
  * @param {string} messageKey - 메시지 정보를 꺼내올 key값
  * @return {object | null} - parcing한 메시지 정보
  */
 WebBuilder.handleMessage.getMessageInSessionStorage = function (messageKey) {
-  const sessionData = sessionStorage.getItem(messageKey)
-  console.log('getMessageInSessionStorage: ', messageKey, sessionData)
-  return sessionData ? JSON.parse(sessionData) : null
+  try {
+    const sessionData = sessionStorage.getItem(messageKey)
+    console.log('getMessageInSessionStorage: ', messageKey, sessionData)
+    return sessionData ? JSON.parse(sessionData) : null
+  } catch (e) {
+    console.log('An unexpected error occurred: ', e.message)
+    return null
+  }
 }
 
 /**
- *
- * @param url
+ * 사이트의 주소를 받아서 새로운 탭으로 화면 오픈
+ * @param {string} url - 사이트 주소
  */
 WebBuilder.handleOpenInNewTab = function (url) {
   window.open(url, '_blank')
 }
 
+/**
+ * 사이트의 주소를 받아서 현재 탭으로 화면 전환
+ * @param {string} url - 사이트 주소
+ */
 WebBuilder.handleChangeLinkOfCurrentTab = function (url) {
   window.location.href = url
+}
+
+/**
+ * 탈리 관련 모듈
+ * @module {{}} handleTally - 탈리 관련 모듈
+ */
+WebBuilder.handleTally = {}
+
+/**
+ * 탈리 모달이 열리는 시간을 고려하여 setTimeout 을 사용할 때 clear하기 위해 timeoutId를 담음
+ * @type {number | null} timeoutId
+ */
+WebBuilder.handleTally.timeoutId = null
+
+/**
+ * 탈리 모달이 열린 후 setTimeout 을 clear
+ */
+WebBuilder.handleTally.clearTimeout = function () {
+  if (this.timeoutId) {
+    clearTimeout(this.timeoutId)
+    this.timeoutId = null
+  }
+}
+
+/**
+ * 탈리 모달을 연다
+ * @param {string} modalId - 특정 모달을 열기 위한 모달 id 값
+ */
+WebBuilder.handleTally.openTally = function (modalId) {
+  try {
+    if (!SITE) {
+      throw new Error('SITE is not found');
+    }
+    if (!SITE.openModalMenu) {
+      throw new Error('SITE.openModalMenu is not found')
+    }
+
+    SITE.openModalMenu(modalId)
+  } catch (e) {
+    if (e instanceof Error) {
+      console.log(e.message)
+    } else {
+      console.log('An unexpected error occurred: ', e.message)
+    }
+  }
+}
+
+/**
+ * 탈리 모달을 열고 데이터를 삽입한다
+ * @param {string} modalId - 특정 모달을 열기 위한 모달 id 값
+ * @param {string[]} arguments - 삽입할 데이터 나열 값
+ */
+WebBuilder.handleTally.openTallyAndSetData = function (modalId, ...arguments) {
+  try {
+    if (!SITE) {
+      throw new Error('SITE is not found');
+    }
+    if (!SITE.openModalMenu) {
+      throw new Error('SITE.openModalMenu is not found')
+    }
+
+    SITE.openModalMenu(modalId)
+
+    let args = arguments;
+    WebBuilder.handleTally.clearTimeout()
+    this.timeoutId = setTimeout(() => {
+      let iframe = document.getElementById("tally-3jl6bQ")
+      let params = args?.reduce((acc, curr) => acc + curr + "&", '&') ?? ''
+      if (iframe) {
+        iframe.src += params;
+      }
+      WebBuilder.handleTally.clearTimeout()
+    }, 500)
+  } catch (e) {
+    if (e instanceof Error) {
+      console.log(e.message)
+    } else {
+      console.log('An unexpected error occurred: ', e.message)
+    }
+  }
+}
+
+/**
+ * Google Tag Manager 에 태깅 작업
+ * @param {string} eventName - 이벤트 이름
+ * @param {object} tagObj - 태그 정보
+ */
+WebBuilder.handleGtmTagging = function (eventName, tagObj) {
+  try {
+    window.dataLayer = window.dataLayer || []
+    let tag = {event: eventName}
+    Object.assign(tag, tagObj)
+    dataLayer.push(tag)
+    console.log(`%c[GoogleTagManager]`,
+        'background: #ffcc4d; color: #000; font-weight: 700;', tag)
+  } catch (e) {
+    console.log('An unexpected error occurred: ', e.message)
+  }
 }
