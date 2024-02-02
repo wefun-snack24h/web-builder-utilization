@@ -183,16 +183,30 @@
     },
     /**
      * 뷰포트에 노출될 옵저버 리턴
-     * @param {function} callback viewport에 element가 노출되면 실행할 콜백함수
-     * @returns {IntersectionObserver}
+     * @param {function} callback 변경될 element 확인 후 실행할 콜백함수
+     * @returns {MutationObserver}
      */
-    handleGetObserver: function (callback) {
-      return new IntersectionObserver(function (entries) {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            callback(entry.target)
+    handleGetMutationObserver: function (callback) {
+      let timer;
+      return new MutationObserver(function (mutationList, observer) {
+        if (timer) {
+          clearTimeout(timer);
+        }
+        timer = setTimeout(() => {
+          mutationList.forEach((mutation) => {
+            switch (mutation.type) {
+              case "childList":
+                const tally = document.getElementById("tally-3jl6bQ")
+                if (tally) {
+                  callback(tally)
+                }
+                break;
+            }
+          })
+          if (timer) {
+            clearTimeout(timer);
           }
-        });
+        }, 1000);
       })
     },
     /**
