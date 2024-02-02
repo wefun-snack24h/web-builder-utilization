@@ -10,26 +10,10 @@
 
 (function (_) {
   /**
-   * setInterval 생성시 intervalId 담아두고 추후 clear 처리
-   * @type {number | null}
-   */
-  let intervalId = null;
-
-  /**
    * 탈리 모달이 열리는 시간을 고려하여 setTimeout 을 사용할 때 clear하기 위해 timeoutId를 담음
    * @type {number | null}
    */
   let timeoutId = null;
-
-  /**
-   * intervalId 에 값이 있으면 종료하는 함수
-   */
-  const clearIntervalId = () => {
-    if (intervalId !== null) {
-      clearInterval(intervalId);
-      intervalId = null;
-    }
-  }
 
   /**
    * 탈리 모달이 열린 후 setTimeout 을 clear
@@ -83,10 +67,7 @@
       sendMessage: function (targetWindow, message, origin = '*',
           options = undefined) {
         try {
-          clearIntervalId();
-          intervalId = setInterval(() => {
-            targetWindow.postMessage(message, origin, options)
-          }, 500)
+          targetWindow.postMessage(message, origin, options)
         } catch (e) {
           errorLog(e)
         }
@@ -103,35 +84,6 @@
         try {
           targetWindow.addEventListener('message',
               messageListener(callbackFunc, messageKey), eventOptions)
-        } catch (e) {
-          errorLog(e)
-        }
-      },
-      /**
-       * 메시지를 받은 프레임에서 메시지를 보낸 곳에 메시지 수신여부를 보냄
-       * @param {Window | globalThis} targetWindow 메시지를 보낼 타겟 윈도우 (부모: window.parent / 자식: document.querySelector('iframe').contentWindow)
-       * @param {string} origin 수신받을 도메인 정보 (내가 메시지를 받은 도메인에게 보내는 것이 좋음)
-       * @param {Transferable[] | undefined} options 일련의 transfer 객체 (en-US). 메세지와 함께 전송됩니다. 이 객체들의 소유권은 수신 측에게 전달되며, 더 이상 송신 측에서 사용할 수 없습니다.
-       */
-      sendReturnMessage: function (targetWindow, origin = '*',
-          options = undefined) {
-        try {
-          targetWindow.postMessage({key: 'frameReturnMessage'}, origin, options)
-        } catch (e) {
-          errorLog(e)
-        }
-      },
-      /**
-       * 메시지를 보낸 프레임에서 메시지를 보낸 곳으로부터 메시지 수신여부를 받았을 때 지속적으로 보내던 sendMessage timer를 종료함
-       * @param {Window | globalThis} targetWindow 메시지를 받을 타겟 윈도우 (기본값: window)
-       * @param {boolean | AddEventListenerOptions | undefined} eventOptions message 이벤트 옵션
-       */
-      receiveReturnMessage: function (targetWindow = window,
-          eventOptions = undefined) {
-        try {
-          targetWindow.addEventListener('message',
-              messageListener(clearIntervalId, 'frameReturnMessage'),
-              eventOptions)
         } catch (e) {
           errorLog(e)
         }
