@@ -187,27 +187,26 @@
      * @returns {MutationObserver}
      */
     handleGetMutationObserver: function (callback) {
-      let timer;
+      let timer = null;
       return new MutationObserver(function (mutationList, observer) {
         if (timer) {
           clearTimeout(timer);
         }
+
         timer = setTimeout(() => {
-          mutationList.forEach((mutation) => {
-            switch (mutation.type) {
-              case "childList":
-                const tally = document.getElementById("tally-3jl6bQ")
-                    || document.getElementById('tally-mOQ5kp-mobile')
-                if (tally) {
-                  callback(tally)
-                }
-                break;
+          const mutation = mutationList?.[0];
+          if (mutation && mutation.type === 'childList') {
+            const pcTally = document.getElementById("tally-3jl6bQ")
+            const mobileTally = document.getElementById('tally-mOQ5kp-mobile')
+            if (pcTally) {
+              callback(pcTally)
             }
-          })
-          if (timer) {
-            clearTimeout(timer);
+
+            if (mobileTally) {
+              callback(mobileTally)
+            }
           }
-        }, 700);
+        }, 1000);
       })
     },
     /**
