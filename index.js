@@ -197,6 +197,7 @@
             switch (mutation.type) {
               case "childList":
                 const tally = document.getElementById("tally-3jl6bQ")
+                    || document.getElementById('tally-mOQ5kp-mobile')
                 if (tally) {
                   callback(tally)
                 }
@@ -206,7 +207,7 @@
           if (timer) {
             clearTimeout(timer);
           }
-        }, 1000);
+        }, 700);
       })
     },
     /**
