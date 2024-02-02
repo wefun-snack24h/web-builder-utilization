@@ -10,20 +10,10 @@
 
 (function (_) {
   /**
-   * 탈리 모달이 열리는 시간을 고려하여 setTimeout 을 사용할 때 clear하기 위해 timeoutId를 담음
-   * @type {number | null}
+   * argumentParams 저장 변수
+   * @type {string}
    */
-  let timeoutId = null;
-
-  /**
-   * 탈리 모달이 열린 후 setTimeout 을 clear
-   */
-  const clearTimeoutId = () => {
-    if (timeoutId !== null) {
-      clearTimeout(timeoutId);
-      timeoutId = null;
-    }
-  }
+  let argumentParams = '';
 
   /**
    * message 실행 콜백 함수
@@ -154,22 +144,11 @@
 
           _.SITE.openModalMenu(modalId)
 
-          let args = arguments;
-          if (!!args?.length) {
-            clearTimeoutId()
-            timeoutId = setTimeout(() => {
-              let iframe = document.getElementById("tally-3jl6bQ")
-              let params = "&" + args.join("&")
-              if (iframe) {
-                iframe.src += params;
-              }
-              clearTimeoutId()
-            }, 500)
-          }
+          argumentParams = "&" + arguments.join("&")
         } catch (e) {
           errorLog(e)
         }
-      }
+      },
     },
     /**
      * Google Tag Manager 에 태깅 작업
@@ -202,5 +181,26 @@
     handleChangeLinkOfCurrentTab: function (url) {
       window.location.href = url
     },
+    /**
+     * 뷰포트에 노출될 옵저버 리턴
+     * @param {function} callback viewport에 element가 노출되면 실행할 콜백함수
+     * @returns {IntersectionObserver}
+     */
+    handleGetObserver: function (callback) {
+      return new IntersectionObserver(function (entries) {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            callback(entry.target)
+          }
+        });
+      })
+    },
+    /**
+     * argumentParams 을 내보냄
+     * @returns {string}
+     */
+    getArgumentParams: function () {
+      return argumentParams
+    }
   }
 })(window)
