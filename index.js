@@ -96,7 +96,6 @@
       saveMessageInSessionStorage: function (messageKey, messageObj) {
         try {
           const saveData = JSON.stringify(messageObj)
-          console.log('saveMessageInSessionStorage: ', messageKey, saveData)
           sessionStorage.setItem(messageKey, saveData)
         } catch (e) {
           errorLog(e)
@@ -110,7 +109,6 @@
       getMessageInSessionStorage: function (messageKey) {
         try {
           const sessionData = sessionStorage.getItem(messageKey)
-          console.log('getMessageInSessionStorage: ', messageKey, sessionData)
           return sessionData ? JSON.parse(sessionData) : null
         } catch (e) {
           errorLog(e)
