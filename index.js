@@ -206,7 +206,11 @@
               callback(mobileTally)
             }
           }
-        }, 1000);
+
+          if (timer) {
+            clearTimeout(timer);
+          }
+        }, 700);
       })
     },
     /**
