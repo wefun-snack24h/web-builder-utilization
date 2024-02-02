@@ -184,9 +184,12 @@
     /**
      * 뷰포트에 노출될 옵저버 리턴
      * @param {function} callback 변경될 element 확인 후 실행할 콜백함수
+     * @param {string[]} targetIds 감시할 타겟의 아이디 리스트
      * @returns {MutationObserver}
      */
-    handleGetMutationObserver: function (callback) {
+    handleGetMutationObserver: function (callback,
+        targetIds = ['tally-3jl6bQ', 'tally-mOQ5kp-mobile',
+          'tally-3jl6bQ-mobile']) {
       let timer = null;
       return new MutationObserver(function (mutationList, observer) {
         if (timer) {
@@ -196,15 +199,12 @@
         timer = setTimeout(() => {
           const mutation = mutationList?.[0];
           if (mutation && mutation.type === 'childList') {
-            const pcTally = document.getElementById("tally-3jl6bQ")
-            const mobileTally = document.getElementById('tally-mOQ5kp-mobile')
-            if (pcTally) {
-              callback(pcTally)
-            }
-
-            if (mobileTally) {
-              callback(mobileTally)
-            }
+            targetIds.forEach((id) => {
+              const target = document.getElementById(id)
+              if (target) {
+                callback(target)
+              }
+            })
           }
 
           if (timer) {
