@@ -257,8 +257,9 @@
             + serviceName + '&serviceSubName=' + serviceSubName + '&url=' + url;
         _.WEFUN.handleOpenInNewTab(openLink)
       } else {
-        const pathname = new URL(url).pathname.replace('/', '')
-        const href = 'https://snack24gd.imweb.me/?category_name=' + pathname
+        const pathname = new URL(url).pathname;
+        const href = 'https://snack24gd.imweb.me/?category_name='
+            + pathname.slice(pathname.lastIndexOf('/') + 1)
             + '&' + _.WEFUN.getUtmTags(url.includes('home'))
 
         _.WEFUN.handleMessage.sendMessage(window.parent,
