@@ -159,10 +159,11 @@
       try {
         window.dataLayer = window.dataLayer || []
         let tag = {event: eventName}
-        Object.assign(tag, tagObj)
+        let route = {route: JSON.parse(sessionStorage.getItem('wefun_info')).route || '아임웹'}
+        Object.assign(tag, tagObj, route)
+
         dataLayer.push(tag)
-        console.log(`%c[GoogleTagManager]`,
-            'background: #ffcc4d; color: #000; font-weight: 700;', tag)
+        console.log(`%c[GoogleTagManager]`, 'background: #ffcc4d; color: #000; font-weight: 700;', tag)
       } catch (e) {
         errorLog(e)
       }
