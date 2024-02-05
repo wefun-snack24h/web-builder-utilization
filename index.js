@@ -257,6 +257,21 @@
             + serviceName + '&serviceSubName=' + serviceSubName + '&url=' + url;
         _.WEFUN.handleOpenInNewTab(openLink)
       } else {
+        // 법인세 비용 절감
+        if (url.includes('donation24.imweb.me')) {
+          const href = 'https://snack24gd.imweb.me/?category_name=donation24'
+          _.WEFUN.handleMessage.sendMessage(window.parent,
+              {href, key: 'wefun_tabPanelContents'})
+          return;
+        }
+        // 친환경 컵 150원
+        if (url.includes('eco24h.imweb.me')) {
+          const href = 'https://snack24gd.imweb.me/?category_name=eco24'
+          _.WEFUN.handleMessage.sendMessage(window.parent,
+              {href, key: 'wefun_tabPanelContents'})
+          return;
+        }
+        // 그외 lnb
         const pathname = new URL(url).pathname;
         const href = 'https://snack24gd.imweb.me/?category_name='
             + pathname.slice(pathname.lastIndexOf('/') + 1)
