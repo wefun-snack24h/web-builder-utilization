@@ -257,7 +257,10 @@
             + serviceName + '&serviceSubName=' + serviceSubName + '&url=' + url;
         _.WEFUN.handleOpenInNewTab(openLink)
       } else {
-        const href = url + _.WEFUN.getUtmTags(url.includes('home'))
+        const pathname = new URL(url).pathname
+        const href = 'https://snack24gd.imweb.me/?category_name=' + pathname
+            + '&' + _.WEFUN.getUtmTags(url.includes('home'))
+
         _.WEFUN.handleMessage.sendMessage(window.parent,
             {href, key: 'wefun_tabPanelContents'})
       }
