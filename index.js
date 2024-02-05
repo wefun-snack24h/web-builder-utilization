@@ -1,11 +1,7 @@
 /**
  * @file 아임웹 등 웹빌더 공통 모듈 생성 파일
  * @module WEFUN 아임웹 등 웹빌더 공통 모듈
- * @module handleMessage 메시지 통신관련 모듈
- * @module handleTally 탈리 관련 모듈
- * @module handleOpenInNewTab 페이지 새탭 오픈 함수
- * @module handleChangeLinkOfCurrentTab 페이지 현재탭 전환 함수
- * @module handleGtmTagging gtm 태깅 함수
+ * @module WEFUN_HOME 아임웹 홈에서 사용하는 모듈
  */
 
 (function (_) {
@@ -159,9 +155,9 @@
       try {
         window.dataLayer = window.dataLayer || []
         let tag = {event: eventName}
-        let route = {route: JSON.parse(sessionStorage.getItem('wefun_info')).route || '아임웹'}
-        Object.assign(tag, tagObj, route)
-
+        const session = _.WEFUN.handleMessage.getMessageInSessionStorage(
+            'wefun_info')
+        Object.assign(tag, tagObj, {route: session?.route || '아임웹'})
         dataLayer.push(tag)
         console.log(`%c[GoogleTagManager]`, 'background: #ffcc4d; color: #000; font-weight: 700;', tag)
       } catch (e) {
@@ -220,6 +216,80 @@
      */
     getArgumentParams: function () {
       return argumentParams
+    },
+    /**
+     * utm tag 호출
+     * @param inHome
+     * @returns {string}
+     */
+    getUtmTags: function (inHome = false) {
+      const wefunInfo = _.WEFUN.handleMessage.getMessageInSessionStorage(
+          'wefun_info')
+      const tagInfo = wefunInfo?.route === '관리자페이지' ? 'fromportal'
+          : 'websiteofficial'
+
+      const utmTags = [];
+      const tags = ['source', 'medium', 'campaign', 'term'];
+      for (let tag of tags) {
+        if (tag === 'medium') {
+          utmTags.push('utm_' + tag + '=' + (inHome ? 'home' : tagInfo));
+        } else {
+          utmTags.push('utm_' + tag + '=' + tagInfo);
+        }
+
+        if (localStorage.getItem('origin_' + tag)) {
+          utmTags.push(
+              'origin_' + tag + '=' + localStorage.getItem('origin_' + tag));
+        }
+      }
+      return utmTags.join('&');
+    }
+  }
+
+  _.WEFUN_HOME = {
+    handleClickUrl: function (url) {
+      const wefunInfo = _.WEFUN.getMessageInSessionStorage('wefun_info');
+
+      if (wefunInfo && wefunInfo.route === '관리자페이지') {
+        const {serviceName, serviceSubName} = wefunInfo;
+        const openLink = 'https://www.snack24h.com/pc/admin/featpaper/service?serviceName='
+            + serviceName + '&serviceSubName=' + serviceSubName + '&url=' + url;
+        _.WEFUN.handleOpenInNewTab(openLink)
+      } else {
+        const href = url + _.WEFUN.getUtmTags(url.includes('home'))
+        _.WEFUN.handleMessage.sendMessage(window.parent,
+            {href, key: 'wefun_tabPanelContents'})
+      }
+    },
+    handleChangeIframeSrc: function (iframeId, iframeSrc) {
+      const iframe = document.getElementById(iframeId);
+      if (iframe) {
+        iframe.src = iframeSrc + '?' + _.WEFUN.getUtmTags(
+            iframeSrc.includes('home'))
+      }
+    },
+    handleChangeHomeCategory: function (pathname) {
+      _.WEFUN_HOME.findSelectedTabName(pathname)
+      _.WEFUN_HOME.handleChangeIframeSrc('adminHomeTabPanel',
+          'https://snack24gd.imweb.me/' + pathname)
+
+      const tabList = document.getElementById('adminHomeTabList');
+      if (tabList) {
+        tabList.scrollIntoView({behavior: 'smooth', block: 'start'})
+      }
+    },
+    findSelectedTabName: function (pathname) {
+      const tabNames = document.getElementsByClassName('home-tab-name');
+      if (tabNames) {
+        for (let i = 0; i < tabNames.length; i++) {
+          const target = tabNames[i];
+          if (target.dataset.key === pathname) {
+            target.classList.add('selected')
+          } else {
+            target.classList.remove('selected')
+          }
+        }
+      }
     }
   }
 })(window)
