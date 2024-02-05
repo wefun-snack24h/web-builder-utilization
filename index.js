@@ -260,13 +260,15 @@
         // 법인세 비용 절감
         if (url.includes('donation24.imweb.me')) {
           const href = 'https://snack24gd.imweb.me/?category_name=donation24'
+              + '&' + _.WEFUN.getUtmTags()
           _.WEFUN.handleMessage.sendMessage(window.parent,
               {href, key: 'wefun_tabPanelContents'})
           return;
         }
         // 친환경 컵 150원
         if (url.includes('eco24h.imweb.me')) {
-          const href = 'https://snack24gd.imweb.me/?category_name=eco24'
+          const href = 'https://snack24gd.imweb.me/?category_name=eco24' + '&'
+              + _.WEFUN.getUtmTags()
           _.WEFUN.handleMessage.sendMessage(window.parent,
               {href, key: 'wefun_tabPanelContents'})
           return;
