@@ -248,7 +248,8 @@
 
   _.WEFUN_HOME = {
     handleClickUrl: function (url) {
-      const wefunInfo = _.WEFUN.getMessageInSessionStorage('wefun_info');
+      const wefunInfo = _.WEFUN.handleMessage.getMessageInSessionStorage(
+          'wefun_info');
 
       if (wefunInfo && wefunInfo.route === '관리자페이지') {
         const {serviceName, serviceSubName} = wefunInfo;
