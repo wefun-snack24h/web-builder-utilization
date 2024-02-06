@@ -1,7 +1,5 @@
 /**
  * @file 아임웹 등 웹빌더 공통 모듈 생성 파일
- * @module WEFUN 아임웹 등 웹빌더 공통 모듈
- * @module WEFUN_HOME 아임웹 홈에서 사용하는 모듈
  */
 
 (function (_) {
@@ -35,6 +33,7 @@
   }
 
   /**
+   * @module WEFUN
    * window.WEFUN 전역 객체
    */
   _.WEFUN = {
@@ -246,7 +245,15 @@
     }
   }
 
+  /**
+   * @module WEFUN_HOME
+   * 아임웹 홈에서 사용하는 모듈
+   */
   _.WEFUN_HOME = {
+    /**
+     * 입력받은 url로 페이지 링크 이동
+     * @param {string} url 이동할 url
+     */
     handleClickUrl: function (url) {
       const wefunInfo = _.WEFUN.handleMessage.getMessageInSessionStorage(
           'wefun_info');
@@ -283,6 +290,11 @@
             {href, key: 'wefun_tabPanelContents'})
       }
     },
+    /**
+     * iframe url 변경
+     * @param {string} iframeId iframe 아이디
+     * @param {string} iframeSrc 변경할 iframe url
+     */
     handleChangeIframeSrc: function (iframeId, iframeSrc) {
       const iframe = document.getElementById(iframeId);
       if (iframe) {
@@ -290,6 +302,21 @@
             iframeSrc.includes('home'))
       }
     },
+    /**
+     * iframe 높이 변경
+     * @param {string} iframeId iframe 아이디
+     * @param {number} height iframe 높이 값
+     */
+    handleChangeIframeHeight: function (iframeId, height) {
+      const iframe = document.getElementById(iframeId);
+      if (iframe) {
+        iframe.style.height = `${height}px`
+      }
+    },
+    /**
+     * 홈 카테고리 변경
+     * @param {string} pathname 카테고리 전환할 key 값 (생성된 페이지(아임웹)의 pathname)
+     */
     handleChangeHomeCategory: function (pathname) {
       _.WEFUN_HOME.findSelectedTabName(pathname)
       _.WEFUN_HOME.handleChangeIframeSrc('adminHomeTabPanel',
@@ -300,6 +327,10 @@
         tabList.scrollIntoView({behavior: 'smooth', block: 'start'})
       }
     },
+    /**
+     * home tab name 찾아서 selected class 적용
+     * @param {string} pathname selected 적용할 target의 key 값
+     */
     findSelectedTabName: function (pathname) {
       const tabNames = document.getElementsByClassName('home-tab-name');
       if (tabNames) {
