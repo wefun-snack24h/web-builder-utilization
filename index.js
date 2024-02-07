@@ -217,7 +217,7 @@
       return argumentParams
     },
     /**
-     * utm tag 호출
+     * utm tag 생성
      * @param inHome
      * @returns {string}
      */
@@ -251,20 +251,23 @@
    */
   _.WEFUN_HOME = {
     /**
-     * 입력받은 url로 페이지 링크 이동
+     * 입력받은 url로 페이지 링크 이동 (홈에서 클릭시)
      * @param {string} url 이동할 url
      */
     handleClickUrl: function (url) {
       const wefunInfo = _.WEFUN.handleMessage.getMessageInSessionStorage(
           'wefun_info');
 
+      // 관리자 페이지에서 페이지 이동
       if (wefunInfo && wefunInfo.route === '관리자페이지') {
         const {serviceName, serviceSubName} = wefunInfo;
         const openLink = 'https://www.snack24h.com/pc/admin/featpaper/service?serviceName='
             + serviceName + '&serviceSubName=' + serviceSubName + '&url=' + url;
         _.WEFUN.handleOpenInNewTab(openLink)
-      } else {
-        // 법인세 비용 절감
+      }
+      // 관리자 페이지가 아닌 경우
+      else {
+        // LNB: 법인세 비용 절감
         if (url.includes('donation24.imweb.me')) {
           const href = 'https://snack24gd.imweb.me/?category_name=donation24'
               + '&' + _.WEFUN.getUtmTags()
@@ -272,7 +275,8 @@
               {href, key: 'wefun_tabPanelContents'})
           return;
         }
-        // 친환경 컵 150원
+
+        // LNB: 친환경 컵 150원
         if (url.includes('eco24h.imweb.me')) {
           const href = 'https://snack24gd.imweb.me/?category_name=eco24' + '&'
               + _.WEFUN.getUtmTags()
@@ -280,7 +284,8 @@
               {href, key: 'wefun_tabPanelContents'})
           return;
         }
-        // 그외 lnb
+
+        // LNB: 기타 모든 LNB
         const pathname = new URL(url).pathname;
         const href = 'https://snack24gd.imweb.me/?category_name='
             + pathname.slice(pathname.lastIndexOf('/') + 1)
