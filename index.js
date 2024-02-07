@@ -260,9 +260,8 @@
 
       // 관리자 페이지에서 페이지 이동
       if (wefunInfo && wefunInfo.route === '관리자페이지') {
-        const {serviceName, serviceSubName} = wefunInfo;
-        const openLink = 'https://www.snack24h.com/pc/admin/featpaper/service?serviceName='
-            + serviceName + '&serviceSubName=' + serviceSubName + '&url=' + url;
+        const openLink = 'https://www.snack24h.com/pc/admin/featpaper/service?url='
+            + url;
         _.WEFUN.handleOpenInNewTab(openLink)
       }
       // 관리자 페이지가 아닌 경우
