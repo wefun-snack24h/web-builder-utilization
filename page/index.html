@@ -102,11 +102,11 @@
         <div>
           <span class="form-label">서브서비스명</span> <input type="text" id="sub-service"/>
         </div>
-        <button onclick="handleCLickGtmTagging('intro')">코드만들기</button>
+        <button onclick="handleCLickGtmTagging()">코드만들기</button>
       </div>
       <div class="module__code">
-        <textarea id="result1" style="width: 100%"></textarea>
-        <button onclick="handleCopy('result1')">코드 복사</button>
+        <textarea id="result__1" style="width: 100%"></textarea>
+        <button onclick="handleCopy('1')">코드 복사</button>
       </div>
     </div>
 
@@ -120,8 +120,8 @@
         <button onclick="handleCLickOpenTally()">코드만들기</button>
       </div>
       <div class="module__code">
-        <textarea id="result2" style="width: 100%"></textarea>
-        <button onclick="handleCopy('result2')">코드 복사</button>
+        <textarea id="result__2" style="width: 100%"></textarea>
+        <button onclick="handleCopy('2')">코드 복사</button>
       </div>
     </div>
 
@@ -130,13 +130,13 @@
       <div class="module__form">
         <h2>[URL]</h2>
         <div>
-          <span class="form-label">새 창으로 열기</span> <input type="text" id="url"/>
+          <span class="form-label">새 창으로 열기</span> <input type="text" id="form__3-1"/>
         </div>
-        <button onclick="handleCLickOpenTally()">코드만들기</button>
+        <button onclick="handleClickOpenInNewTab('3-1')">코드만들기</button>
       </div>
       <div class="module__code">
-          <textarea id="result3-1" style="width: 100%"></textarea>
-          <button onclick="handleCopy('result3-1')">코드 복사</button>
+          <textarea id="result__3-1" style="width: 100%"></textarea>
+          <button onclick="handleCopy('3-1')">코드 복사</button>
       </div>
     </div>
 
@@ -144,13 +144,13 @@
     <div class="module">
       <div class="module__form">
         <div>
-          <span class="form-label">기존 창에 열기</span> <input type="text" id="url"/>
+          <span class="form-label">기존 창에 열기</span> <input type="text" id="result3-2"/>
         </div>
-        <button onclick="handleCLickOpenTally()">코드만들기</button>
+        <button onclick="handleClickChangeLinkOfCurrentTab('result3-2')">코드만들기</button>
       </div>
       <div class="module__code">
-          <textarea id="result3-2" style="width: 100%"></textarea>
-          <button onclick="handleCopy('result3-2')">코드 복사</button>
+          <textarea id="result__3-2" style="width: 100%"></textarea>
+          <button onclick="handleCopy('3-2')">코드 복사</button>
       </div>
     </div>
 
@@ -159,8 +159,8 @@
       <div class="module__form">
       </div>
       <div class="module__code">
-        <textarea id="result4" style="width: 100%"></textarea>
-        <button onclick="handleCopy('result4')">코드 복사</button>
+        <textarea id="result__4" style="width: 100%"></textarea>
+        <button onclick="handleCopy('4')">코드 복사</button>
       </div>
     </div>
   </div>
@@ -168,7 +168,7 @@
 
 <script>
   function handleCopy(id) {
-    window.navigator.clipboard.writeText(document.getElementById(id).value)
+    window.navigator.clipboard.writeText(`result__${document.getElementById(id).value}`)
   }
 
   function handleCLickGtmTagging() {
@@ -183,12 +183,22 @@
         'serviceSubName': '${sub_service}',
         'position': '${select_position}',
         'buttonName': '${select_button}'});`
-    document.getElementById("result1").value = text
+    document.getElementById("result__1").value = text
   }
 
   function handleCLickOpenTally() {
     const text = `javascript: WEFUN.handleTally.openTally('${document.getElementById("url").value}');`
     document.getElementById("result2").value = text
+  }
+
+  function handleClickOpenInNewTab(id) {
+    const text = `javascript: WEFUN.handleOpenInNewTab('form__${document.getElementById(id).value}');`
+    document.getElementById(`result__${id}`).value = text
+  }
+
+  function handleClickChangeLinkOfCurrentTab(id) {
+    const text = `javascript: WEFUN.handleChangeLinkOfCurrentTab('form__${document.getElementById(id).value}');`
+    document.getElementById(`result__${id}`).value = text
   }
 
 </script>
