@@ -16,7 +16,6 @@
     .module {
       display: flex;
       width: 100%;
-      border-bottom: 1px solid black;
     }
 
     .module__form {
@@ -129,10 +128,29 @@
     <!--  -->
     <div class="module">
       <div class="module__form">
+        <h2>[URL]</h2>
+        <div>
+          <span class="form-label">새 창으로 열기</span> <input type="text" id="url"/>
+        </div>
+        <button onclick="handleCLickOpenTally()">코드만들기</button>
       </div>
       <div class="module__code">
-        <textarea id="result3" style="width: 100%"></textarea>
-        <button onclick="handleCopy('result3')">코드 복사</button>
+          <textarea id="result3-1" style="width: 100%"></textarea>
+          <button onclick="handleCopy('result3-1')">코드 복사</button>
+      </div>
+    </div>
+
+    <!--  -->
+    <div class="module">
+      <div class="module__form">
+        <div>
+          <span class="form-label">기존 창에 열기</span> <input type="text" id="url"/>
+        </div>
+        <button onclick="handleCLickOpenTally()">코드만들기</button>
+      </div>
+      <div class="module__code">
+          <textarea id="result3-2" style="width: 100%"></textarea>
+          <button onclick="handleCopy('result3-2')">코드 복사</button>
       </div>
     </div>
 
