@@ -154,9 +154,8 @@
     const select_position = document.querySelector('input[name="position"]:checked').value
     const select_button = document.querySelector('input[name="button"]:checked').value
 
-    const text = `javascript: WEFUN.handleTally.openTally('${type === 'intro' ? url_intro
-        : url_consult}');
-      javascript: WEFUN.handleGtmTagging('beta_service', {
+    const text =
+        `javascript: WEFUN.handleGtmTagging('beta_service', {
         'action': 'button',
         'serviceName': '${service}',
         'serviceSubName': '${sub_service}',
@@ -165,6 +164,10 @@
       });`
     document.getElementById("result-1").value = text
     window.navigator.clipboard.writeText(text)
+  }
+
+  function handleCLickGtmTagging() {
+      const text = `javascript: WEFUN.handleTally.openTally('${type === 'intro' ? url_intro : url_consult}');`
   }
 
 </script>
