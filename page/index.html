@@ -10,9 +10,12 @@
     }
 
     .modules {
-      max-width: 1000px;
+      max-width: 1100px;
       min-height: 100vh;
       margin: 0 auto;
+      display: flex;
+      flex-flow: column;
+      row-gap: 30px;
     }
 
     .module {
@@ -23,7 +26,7 @@
     .module__form {
       display: flex;
       padding: 30px;
-      width: 50%;
+      width: 45%;
       flex-direction: column;
       gap: 16px;
     }
@@ -39,8 +42,14 @@
 
     .form-label {
       display: inline-block;
-      width: 100px;
       font-weight: 700;
+      padding-bottom: 5px;
+    }
+
+    .form-desc {
+      font-size: 14px;
+      color: #8f8f8f;
+      padding-bottom: 5px;
     }
 
     strong {
@@ -57,7 +66,7 @@
     }
 
     input[type=text] {
-      width: calc(500px);
+      width: 100%;
       height: 25px;
     }
   </style>
@@ -82,7 +91,6 @@
           <input type="radio" id="position-e" value="하단" name="position"/>
           <label for="position-e">하단</label>
         </div>
-        <hr/>
         <div>
           <strong>버튼명</strong>
           <input type="radio" id="button-a" value="무료 상담하기" name="button" checked/>
@@ -97,7 +105,6 @@
           <input type="radio" id="button-c" value="소개서 받기" name="button"/>
           <label for="button-c">소개서 받기</label>
         </div>
-        <hr/>
         <div>
           <span class="form-label">서비스명</span> <input type="text" id="service"/>
         </div>
@@ -132,7 +139,9 @@
       <div class="module__form">
         <h2>[URL]</h2>
         <div>
-          <span class="form-label">새 창으로 열기</span> <input type="text" id="form__3-1"/>
+          <span class="form-label">URL</span>
+          <p class="form-desc">입력한 URL이 새 창으로 열립니다.</p>
+          <input type="text" id="form__3-1"/>
         </div>
         <button onclick="handleClickOpenInNewTab('3-1')">코드만들기</button>
       </div>
@@ -146,7 +155,9 @@
     <div class="module">
       <div class="module__form">
         <div>
-          <span class="form-label">기존 창에 열기</span> <input type="text" id="form__3-2"/>
+          <span class="form-label">URL</span>
+          <p class="form-desc">입력한 URL이 기존 창에 열립니다.</p>
+          <input type="text" id="form__3-2"/>
         </div>
         <button onclick="handleClickChangeLinkOfCurrentTab('3-2')">코드만들기</button>
       </div>
@@ -180,11 +191,12 @@
     const select_button = document.querySelector('input[name="button"]:checked').value
 
     const text =`javascript: WEFUN.handleGtmTagging('beta_service', {
-        'action': 'button',
-        'serviceName': '${service}',
-        'serviceSubName': '${sub_service}',
-        'position': '${select_position}',
-        'buttonName': '${select_button}'});`
+  'action': 'button',
+  'serviceName': '${service}',
+  'serviceSubName': '${sub_service}',
+  'position': '${select_position}',
+  'buttonName': '${select_button}'
+});`
     document.getElementById("result__1").value = text
   }
 
