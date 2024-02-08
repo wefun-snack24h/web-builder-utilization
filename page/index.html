@@ -33,6 +33,7 @@
       display: flex;
       justify-content: center;
       padding: 20px;
+      flex-flow: column;
     }
 
     .form-label {
@@ -49,6 +50,15 @@
     button {
       padding: 5px;
     }
+
+    textarea {
+      height: 100%;
+    }
+
+    input[type=text] {
+      width: calc(500px);
+      height: 25px;
+    }
   </style>
 </head>
 <body>
@@ -57,7 +67,7 @@
     <!-- tagging -->
     <div class="module">
       <div class="module__form">
-        <h2>GA</h2>
+        <h2>[GA]</h2>
         <div>
           <strong>위치</strong>
           <input type="radio" id="position-a" value="상단" name="position" checked/>
@@ -71,9 +81,7 @@
           <input type="radio" id="position-e" value="하단" name="position"/>
           <label for="position-e">하단</label>
         </div>
-
         <hr/>
-
         <div>
           <strong>버튼명</strong>
           <input type="radio" id="button-a" value="무료 상담하기" name="button" checked/>
@@ -88,40 +96,33 @@
           <input type="radio" id="button-c" value="소개서 받기" name="button"/>
           <label for="button-c">소개서 받기</label>
         </div>
-
         <hr/>
-
         <div>
           <span class="form-label">서비스명</span> <input type="text" id="service"/>
         </div>
         <div>
           <span class="form-label">서브서비스명</span> <input type="text" id="sub-service"/>
         </div>
-        <div>
-          <span class="form-label">소개서(tally)</span> <input type="text" id="url-intro"/>
-          <button onclick="handleClickTagging('intro')">코드만들기</button>
-        </div>
+        <button onclick="handleCLickGtmTagging('intro')">코드만들기</button>
       </div>
       <div class="module__code">
         <textarea id="result1" style="width: 100%"></textarea>
+        <button onclick="handleCopy('result1')">코드 복사</button>
       </div>
     </div>
 
     <!--  -->
     <div class="module">
       <div class="module__form">
-        <h2>Tally</h2>
+        <h2>[Tally]</h2>
         <div>
-          <span class="form-label">소개서(tally)</span> <input type="text" id="url-intro"/>
-          <button onclick="handleClickTagging('intro')">코드만들기</button>
+          <span class="form-label">tally url</span> <input type="text" id="url"/>
         </div>
-        <div>
-          <span class="form-label">상담(tally)</span> <input type="text" id="url-consult"/>
-          <button onclick="handleClickTagging('consult')">코드만들기</button>
-        </div>
+        <button onclick="handleCLickOpenTally()">코드만들기</button>
       </div>
       <div class="module__code">
         <textarea id="result2" style="width: 100%"></textarea>
+        <button onclick="handleCopy('result2')">코드 복사</button>
       </div>
     </div>
 
@@ -131,6 +132,7 @@
       </div>
       <div class="module__code">
         <textarea id="result3" style="width: 100%"></textarea>
+        <button onclick="handleCopy('result3')">코드 복사</button>
       </div>
     </div>
 
@@ -140,34 +142,35 @@
       </div>
       <div class="module__code">
         <textarea id="result4" style="width: 100%"></textarea>
+        <button onclick="handleCopy('result4')">코드 복사</button>
       </div>
     </div>
   </div>
 </div>
 
 <script>
-  function handleClickTagging(type) {
+  function handleCopy(id) {
+    window.navigator.clipboard.writeText(document.getElementById(id).value)
+  }
+
+  function handleCLickGtmTagging() {
     const service = document.getElementById("service").value
     const sub_service = document.getElementById("sub-service").value
-    const url_intro = document.getElementById("url-intro").value
-    const url_consult = document.getElementById("url-consult").value
     const select_position = document.querySelector('input[name="position"]:checked').value
     const select_button = document.querySelector('input[name="button"]:checked').value
 
-    const text =
-        `javascript: WEFUN.handleGtmTagging('beta_service', {
+    const text =`javascript: WEFUN.handleGtmTagging('beta_service', {
         'action': 'button',
         'serviceName': '${service}',
         'serviceSubName': '${sub_service}',
         'position': '${select_position}',
-        'buttonName': '${select_button}',
-      });`
-    document.getElementById("result-1").value = text
-    window.navigator.clipboard.writeText(text)
+        'buttonName': '${select_button}'});`
+    document.getElementById("result1").value = text
   }
 
-  function handleCLickGtmTagging() {
-      const text = `javascript: WEFUN.handleTally.openTally('${type === 'intro' ? url_intro : url_consult}');`
+  function handleCLickOpenTally() {
+    const text = `javascript: WEFUN.handleTally.openTally('${document.getElementById("url").value}');`
+    document.getElementById("result2").value = text
   }
 
 </script>
