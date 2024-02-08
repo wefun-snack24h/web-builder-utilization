@@ -50,6 +50,11 @@
       padding-bottom: 5px;
     }
 
+    .form-label-wrap {
+      display: flex;
+      align-items: center;
+    }
+
     strong {
       display: block;
       padding-bottom: 5px;
@@ -132,18 +137,43 @@
 
     <hr />
 
-    <!--  -->
+    <!-- Tally -->
     <div class="module">
       <div class="module__form">
         <h2>[Tally]</h2>
         <div>
-          <span class="form-label">tally url</span> <input type="text" id="url"/>
+          <span class="form-label">tally 모달 url</span>
+          <p class="form-desc">tally 모달만 오픈하는 경우</p>
+          <input type="text" id="tally-url1"/>
         </div>
-        <button onclick="handleCLickOpenTally()">코드만들기</button>
+        <button onclick="handleClickOpenTally()">코드만들기</button>
       </div>
       <div class="module__code">
-        <textarea id="result__2"></textarea>
-        <button onclick="handleCopy('2')">코드 복사</button>
+        <textarea id="result__2-1" style="width: 100%"></textarea>
+        <button onclick="handleCopy('2-1')">코드 복사</button>
+      </div>
+    </div>
+
+    <!-- Tally set data -->
+    <div class="module">
+      <div class="module__form">
+        <div>
+          <span class="form-label">tally 모달 url</span>
+          <p class="form-desc">tally 모달 오픈 + 데이터 입력 추가 필요</p>
+          <input type="text" id="tally-url2"/>
+        </div>
+        <div id="tally-set-data">
+          <div class="form-label-wrap">
+            <span class="form-label" style="flex: 1">삽입 데이터</span>
+            <button style="width: 100px" onclick="handleClickAdd()">추가</button>
+          </div>
+          <input type="text" class="set-data"/>
+        </div>
+        <button onclick="handleClickOpenTallyAndSetData()">코드만들기</button>
+      </div>
+      <div class="module__code">
+        <textarea id="result__2-2" style="width: 100%"></textarea>
+        <button onclick="handleCopy('2-2')">코드 복사</button>
       </div>
     </div>
 
@@ -166,7 +196,6 @@
       </div>
     </div>
 
-    <!--  -->
     <div class="module">
       <div class="module__form">
         <div>
@@ -184,6 +213,38 @@
 
     <hr />
 
+    <!-- handleClickUrl -->
+    <div class="module">
+      <div class="module__form">
+        <h2>[Home]</h2>
+        <div>
+          <span class="form-label">서비스 URL</span>
+          <p class="form-desc">입력한 URL로 관리자페이지에서는 새창, 신규서비스에서는 replace 됩니다.</p>
+          <input type="text" id="new-service-url"/>
+        </div>
+        <button onclick="handleClickUrl()">코드만들기</button>
+      </div>
+      <div class="module__code">
+        <textarea id="result__4-1" style="width: 100%"></textarea>
+        <button onclick="handleCopy('4-1')">코드 복사</button>
+      </div>
+    </div>
+
+    <!-- handleChangeHomeCategory -->
+    <div class="module">
+      <div class="module__form">
+        <div>
+          <span class="form-label" style="width: 200px">홈 탭 pathname</span>
+          <p class="form-desc">예시) https://snack24gd.imweb.me/service 에서 service를 넣으시면 됩니다.</p>
+          <input type="text" id="home-tab-pathname"/>
+        </div>
+        <button onclick="handleChangeHomeCategory()">코드만들기</button>
+      </div>
+      <div class="module__code">
+        <textarea id="result__4-2" style="width: 100%"></textarea>
+        <button onclick="handleCopy('4-2')">코드 복사</button>
+      </div>
+    </div>
   </div>
 </div>
 
@@ -220,6 +281,49 @@
     document.getElementById(`result__${id}`).value = text
   }
 
+  function handleClickOpenTally() {
+    const tally_url = document.getElementById('tally-url1').value
+    const text = `javascript: WEFUN.handleTally.openTally('${tally_url}');`
+    document.getElementById('result__2-1').value = text
+  }
+
+  function handleClickOpenTallyAndSetData() {
+    const tally_url = document.getElementById('tally-url2').value
+    const inputs = document.getElementsByClassName('set-data')
+    let valueText = `'${tally_url}'`
+    for (let i = 0; i < inputs.length; i++) {
+      const text = inputs[i].value
+      if (text) {
+        valueText += `, '${inputs[i].value}'`
+      }
+    }
+    const text = `javascript: WEFUN.handleTally.openTallyAndSetData(${valueText});`
+    document.getElementById('result__2-2').value = text
+  }
+
+  function handleClickUrl() {
+    const service_url = document.getElementById('new-service-url').value
+    const text = `javascript: WEFUN_HOME.handleClickUrl('${service_url}');`
+    document.getElementById('result__4-1').value = text
+  }
+
+  function handleChangeHomeCategory() {
+    const tab_pathname = document.getElementById('home-tab-pathname').value
+    const text = `javascript: WEFUN_HOME.handleChangeHomeCategory('${tab_pathname}');`
+    document.getElementById('result__4-2').value = text
+  }
+
+  let id = 1;
+
+  function handleClickAdd() {
+    const parent = document.getElementById(`tally-set-data`);
+
+    const input = document.createElement('input');
+    input.type = 'text'
+    input.classList.add('set-data')
+
+    parent.appendChild(input)
+  }
 </script>
 </body>
 </html>
