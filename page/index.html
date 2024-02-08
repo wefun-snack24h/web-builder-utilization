@@ -144,9 +144,9 @@
     <div class="module">
       <div class="module__form">
         <div>
-          <span class="form-label">기존 창에 열기</span> <input type="text" id="result3-2"/>
+          <span class="form-label">기존 창에 열기</span> <input type="text" id="form__3-2"/>
         </div>
-        <button onclick="handleClickChangeLinkOfCurrentTab('result3-2')">코드만들기</button>
+        <button onclick="handleClickChangeLinkOfCurrentTab('3-2')">코드만들기</button>
       </div>
       <div class="module__code">
           <textarea id="result__3-2" style="width: 100%"></textarea>
@@ -168,7 +168,7 @@
 
 <script>
   function handleCopy(id) {
-    window.navigator.clipboard.writeText(`result__${document.getElementById(id).value}`)
+    window.navigator.clipboard.writeText(`${document.getElementById(`result__${id}`).value}`)
   }
 
   function handleCLickGtmTagging() {
@@ -186,18 +186,13 @@
     document.getElementById("result__1").value = text
   }
 
-  function handleCLickOpenTally() {
-    const text = `javascript: WEFUN.handleTally.openTally('${document.getElementById("url").value}');`
-    document.getElementById("result2").value = text
-  }
-
   function handleClickOpenInNewTab(id) {
-    const text = `javascript: WEFUN.handleOpenInNewTab('form__${document.getElementById(id).value}');`
+    const text = `javascript: WEFUN.handleOpenInNewTab('${document.getElementById(`form__${id}`).value}');`
     document.getElementById(`result__${id}`).value = text
   }
 
   function handleClickChangeLinkOfCurrentTab(id) {
-    const text = `javascript: WEFUN.handleChangeLinkOfCurrentTab('form__${document.getElementById(id).value}');`
+    const text = `javascript: WEFUN.handleChangeLinkOfCurrentTab('${document.getElementById(`form__${id}`).value}');`
     document.getElementById(`result__${id}`).value = text
   }
 
