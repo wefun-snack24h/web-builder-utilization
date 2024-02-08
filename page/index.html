@@ -4,6 +4,11 @@
   <meta charset="UTF-8">
   <title>Title</title>
   <style>
+    * {
+      margin: 0;
+      padding: 0;
+    }
+
     .modules {
       min-height: 100vh;
     }
@@ -11,10 +16,15 @@
     .module {
       display: flex;
       width: 100%;
+      border-bottom: 1px solid black;
     }
 
     .module__form {
+      display: flex;
+      padding: 30px;
       width: 70%;
+      flex-direction: column;
+      gap: 16px;
     }
 
     .module__code {
@@ -24,6 +34,21 @@
       justify-content: center;
       padding: 20px;
     }
+
+    .form-label {
+      display: inline-block;
+      width: 100px;
+      font-weight: 700;
+    }
+
+    strong {
+      display: block;
+      padding-bottom: 5px;
+    }
+
+    button {
+      padding: 5px;
+    }
   </style>
 </head>
 <body>
@@ -32,8 +57,9 @@
     <!-- tagging -->
     <div class="module">
       <div class="module__form">
-        <fieldset>
-          <legend>위치</legend>
+        <h2>GA</h2>
+        <div>
+          <strong>위치</strong>
           <input type="radio" id="position-a" value="상단" name="position" checked/>
           <label for="position-a">상단</label>
           <input type="radio" id="position-b" value="메인" name="position"/>
@@ -44,10 +70,12 @@
           <label for="position-d">플로팅</label>
           <input type="radio" id="position-e" value="하단" name="position"/>
           <label for="position-e">하단</label>
-        </fieldset>
+        </div>
 
-        <fieldset>
-          <legend>버튼명</legend>
+        <hr/>
+
+        <div>
+          <strong>버튼명</strong>
           <input type="radio" id="button-a" value="무료 상담하기" name="button" checked/>
           <label for="button-a">무료 상담하기</label>
           <input type="radio" id="button-b" value="5초 만에 상담받기" name="button"/>
@@ -59,22 +87,19 @@
           <br/>
           <input type="radio" id="button-c" value="소개서 받기" name="button"/>
           <label for="button-c">소개서 받기</label>
-        </fieldset>
-
-        <div>
-          서비스명: <input type="text" id="service"/>
-        </div>
-        <div>
-          서브서비스명: <input type="text" id="sub-service"/>
         </div>
 
-        <div style="width: 400px; padding: 10px; height: 30px; display: flex">
-          tally: <input style="width: 100%" type="text" id="url-intro"/>
-          <button style="width: 80px" onclick="handleClickTagging('intro')">소개서</button>
+        <hr/>
+
+        <div>
+          <span class="form-label">서비스명</span> <input type="text" id="service"/>
         </div>
-        <div style="width: 400px; padding: 10px; height: 30px; display: flex">
-          tally: <input style="width: 100%" type="text" id="url-consult"/>
-          <button style="width: 80px" onclick="handleClickTagging('consult')">상담</button>
+        <div>
+          <span class="form-label">서브서비스명</span> <input type="text" id="sub-service"/>
+        </div>
+        <div>
+          <span class="form-label">소개서(tally)</span> <input type="text" id="url-intro"/>
+          <button onclick="handleClickTagging('intro')">코드만들기</button>
         </div>
       </div>
       <div class="module__code">
@@ -85,6 +110,15 @@
     <!--  -->
     <div class="module">
       <div class="module__form">
+        <h2>Tally</h2>
+        <div>
+          <span class="form-label">소개서(tally)</span> <input type="text" id="url-intro"/>
+          <button onclick="handleClickTagging('intro')">코드만들기</button>
+        </div>
+        <div>
+          <span class="form-label">상담(tally)</span> <input type="text" id="url-consult"/>
+          <button onclick="handleClickTagging('consult')">코드만들기</button>
+        </div>
       </div>
       <div class="module__code">
         <textarea id="result2" style="width: 100%"></textarea>
@@ -129,7 +163,7 @@
         'position': '${select_position}',
         'buttonName': '${select_button}',
       });`
-    document.getElementById("result").value = text
+    document.getElementById("result-1").value = text
     window.navigator.clipboard.writeText(text)
   }
 
