@@ -144,8 +144,7 @@
       <div class="module__form">
         <h2>[Tally]</h2>
         <div>
-          <span class="form-label">tally 모달 url</span>
-          <p class="form-desc">tally 모달만 오픈하는 경우</p>
+          <span class="form-label">Tally Modal URL</span>
           <input type="text" id="tally-url1"/>
         </div>
         <button onclick="handleClickOpenTally()">코드만들기</button>
@@ -160,8 +159,7 @@
     <div class="module">
       <div class="module__form">
         <div>
-          <span class="form-label">tally 모달 url</span>
-          <p class="form-desc">tally 모달 오픈 + 데이터 입력 추가 필요</p>
+          <span class="form-label">Tally Modal URL</span>
           <input type="text" id="tally-url2"/>
         </div>
         <div id="tally-set-data">
@@ -169,6 +167,7 @@
             <span class="form-label" style="flex: 1">삽입 데이터</span>
             <button style="width: 100px" onclick="handleClickAdd()">추가</button>
           </div>
+          <p class="form-desc">tally param 추가: 예) product_name=브라운 커피 1kg</p>
           <input type="text" class="set-data"/>
         </div>
         <button onclick="handleClickOpenTallyAndSetData()">코드만들기</button>
@@ -181,7 +180,7 @@
 
     <hr />
 
-    <!--  -->
+    <!-- open in new URL -->
     <div class="module">
       <div class="module__form">
         <h2>[URL]</h2>
@@ -198,6 +197,7 @@
       </div>
     </div>
 
+    <!-- change link of current tab -->
     <div class="module">
       <div class="module__form">
         <div>
@@ -220,8 +220,8 @@
       <div class="module__form">
         <h2>[Home]</h2>
         <div>
-          <span class="form-label">서비스 URL</span>
-          <p class="form-desc">입력한 URL로 관리자 페이지에서는 새 창으로, 신규 서비스에서는 현재 창에서 페이지가 전환됩니다.</p>
+          <span class="form-label">홈 카테고리(탭) 내 서비스 URL open</span>
+          <p class="form-desc">관리자 페이지에서는 새 창으로, 신규 서비스에서는 현재 창에서 페이지가 전환됩니다.</p>
           <input type="text" id="new-service-url"/>
         </div>
         <button onclick="handleClickUrl()">코드만들기</button>
@@ -236,7 +236,7 @@
     <div class="module">
       <div class="module__form">
         <div>
-          <span class="form-label" style="width: 200px">홈 탭 pathname</span>
+          <span class="form-label">홈 카테고리(탭) 전환 pathname</span>
           <p class="form-desc">예시) https://snack24gd.imweb.me/service 에서 service를 넣으시면 됩니다.</p>
           <input type="text" id="home-tab-pathname"/>
         </div>
@@ -303,8 +303,8 @@
     let valueText = `'${tally_url}'`
     for (let i = 0; i < inputs.length; i++) {
       const text = inputs[i].value
-      if (text) {
-        valueText += `, '${inputs[i].value}'`
+      if (text.trim()) {
+        valueText += `, '${text}'`
       }
     }
     const text = `javascript: WEFUN.handleTally.openTallyAndSetData(${valueText});`
