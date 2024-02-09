@@ -16,7 +16,7 @@
       display: flex;
       flex-flow: column;
       row-gap: 35px;
-      padding: 30px 0 50px;
+      padding: 70px 0 50px;
     }
 
     .module {
@@ -29,7 +29,7 @@
       display: flex;
       width: 45%;
       flex-direction: column;
-      gap: 16px;
+      gap: 25px;
     }
 
     .module__code {
@@ -48,7 +48,7 @@
     .form-desc {
       font-size: 14px;
       color: #8f8f8f;
-      padding-bottom: 5px;
+      padding-bottom: 7px;
     }
 
     .form-label-wrap {
@@ -63,6 +63,36 @@
 
     button {
       padding: 5px;
+      background-color: rgba(2, 117, 255, 0.8);
+      border: none;
+      min-height: 40px;
+      color: #fff;
+      font-weight: 700;
+      font-size: 14px;
+      cursor: pointer;
+    }
+
+    button.line {
+      background-color: #fff;
+      border: 1px solid #0275ff;
+      color: #0275ff;
+      border-radius: 8px;
+    }
+
+    button:hover {
+      background-color: rgba(2, 117, 255, 0.9);
+    }
+
+    button:active {
+      background-color: rgba(2, 117, 255, 1);
+    }
+
+    button.line:hover {
+      background-color: rgba(2, 117, 255, 0.05);
+    }
+
+    button.line:active {
+      background-color: rgba(2, 117, 255, 0.1);
     }
 
     textarea {
@@ -74,7 +104,7 @@
 
     input[type=text] {
       width: calc(100% - 25px);
-      height: 25px;
+      height: 30px;
       padding: 0 10px;
     }
 
@@ -82,19 +112,52 @@
       margin-bottom: 20px;
     }
 
-    hr {
-      margin: 35px 0;
+    h2 {
+      display: flex;
+      align-items: center;
+      font-size: 24px;
+      line-height: 26px;
     }
+
+    h2::before {
+      content: '';
+      width: 5px;
+      height: 22px;
+      background-color: #0275ff;
+      border: 5px;
+      margin-right: 10px;
+    }
+
+    hr {
+      margin: 60px 0;
+      color: #fff;
+      border: 1px;
+    }
+
+    hr.divider {
+      margin: 10px 0px;
+      border-width: 1px 0 0 0;
+      border-style: dashed;
+      border-color: #bbb;
+    }
+
+    label {
+      display: inline-block;
+      font-size: 15px;
+      padding-right: 8px;
+      padding-bottom: 5px;
+    }
+
   </style>
 </head>
 <body>
 <div>
   <div class="modules">
-    <h1>코드 생성하기 ✌🏻</h1>
+    <h1>코드 생성하기 👾</h1>
     <!-- tagging -->
     <div class="module">
       <div class="module__form">
-        <h2>[GA]</h2>
+        <h2>GA</h2>
         <div>
           <strong>위치</strong>
           <input type="radio" id="position-a" value="상단" name="position" checked/>
@@ -129,11 +192,11 @@
         <div>
           <span class="form-label">서브서비스명</span> <input type="text" id="sub-service"/>
         </div>
-        <button onclick="handleCLickGtmTagging()">코드만들기</button>
+        <button class="line" onclick="handleCLickGtmTagging()">코드 생성하기</button>
       </div>
       <div class="module__code">
         <textarea id="result__1"></textarea>
-        <button onclick="handleCopy('1')">코드 복사</button>
+        <button onclick="handleCopy('1')">코드 복사하기</button>
       </div>
     </div>
 
@@ -142,18 +205,20 @@
     <!-- Tally -->
     <div class="module">
       <div class="module__form">
-        <h2>[Tally]</h2>
+        <h2>Tally</h2>
         <div>
           <span class="form-label">Tally Modal URL</span>
           <input type="text" id="tally-url1"/>
         </div>
-        <button onclick="handleClickOpenTally()">코드만들기</button>
+        <button class="line" onclick="handleClickOpenTally()">코드 생성하기</button>
       </div>
       <div class="module__code">
         <textarea id="result__2-1"></textarea>
-        <button onclick="handleCopy('2-1')">코드 복사</button>
+        <button onclick="handleCopy('2-1')">코드 복사하기</button>
       </div>
     </div>
+
+    <hr class="divider">
 
     <!-- Tally set data -->
     <div class="module">
@@ -170,11 +235,11 @@
           <p class="form-desc">tally param 추가: 예) product_name=브라운 커피 1kg</p>
           <input type="text" class="set-data"/>
         </div>
-        <button onclick="handleClickOpenTallyAndSetData()">코드만들기</button>
+        <button class="line" onclick="handleClickOpenTallyAndSetData()">코드 생성하기</button>
       </div>
       <div class="module__code">
         <textarea id="result__2-2"></textarea>
-        <button onclick="handleCopy('2-2')">코드 복사</button>
+        <button onclick="handleCopy('2-2')">코드 복사하기</button>
       </div>
     </div>
 
@@ -183,19 +248,21 @@
     <!-- open in new URL -->
     <div class="module">
       <div class="module__form">
-        <h2>[URL]</h2>
+        <h2>URL</h2>
         <div>
           <span class="form-label">URL</span>
           <p class="form-desc">입력한 URL이 새 창으로 열립니다.</p>
           <input type="text" id="form__3-1"/>
         </div>
-        <button onclick="handleClickOpenInNewTab('3-1')">코드만들기</button>
+        <button class="line" onclick="handleClickOpenInNewTab('3-1')">코드 생성하기</button>
       </div>
       <div class="module__code">
         <textarea id="result__3-1"></textarea>
-        <button onclick="handleCopy('3-1')">코드 복사</button>
+        <button onclick="handleCopy('3-1')">코드 복사하기</button>
       </div>
     </div>
+
+    <hr class="divider">
 
     <!-- change link of current tab -->
     <div class="module">
@@ -205,11 +272,11 @@
           <p class="form-desc">입력한 URL로 현재 창에서 페이지가 전환됩니다.</p>
           <input type="text" id="form__3-2"/>
         </div>
-        <button onclick="handleClickChangeLinkOfCurrentTab('3-2')">코드만들기</button>
+        <button class="line" onclick="handleClickChangeLinkOfCurrentTab('3-2')">코드 생성하기</button>
       </div>
       <div class="module__code">
         <textarea id="result__3-2"></textarea>
-        <button onclick="handleCopy('3-2')">코드 복사</button>
+        <button onclick="handleCopy('3-2')">코드 복사하기</button>
       </div>
     </div>
 
@@ -218,41 +285,43 @@
     <!-- handleClickUrl -->
     <div class="module">
       <div class="module__form">
-        <h2>[Home]</h2>
+        <h2>Home</h2>
         <div>
           <span class="form-label">홈 카테고리(탭) 내 서비스 URL open</span>
           <p class="form-desc">관리자 페이지에서는 새 창으로, 신규 서비스에서는 현재 창에서 페이지가 전환됩니다.</p>
           <input type="text" id="new-service-url"/>
         </div>
-        <button onclick="handleClickUrl()">코드만들기</button>
+        <button class="line" onclick="handleClickUrl()">코드 생성하기</button>
       </div>
       <div class="module__code">
         <textarea id="result__4-1"></textarea>
-        <button onclick="handleCopy('4-1')">코드 복사</button>
+        <button onclick="handleCopy('4-1')">코드 복사하기</button>
       </div>
     </div>
+
+    <hr class="divider">
 
     <!-- handleChangeHomeCategory -->
     <div class="module">
       <div class="module__form">
         <div>
           <span class="form-label">홈 카테고리(탭) 전환 pathname</span>
-          <p class="form-desc">예시) https://snack24gd.imweb.me/service 에서 service를 넣으시면 됩니다.</p>
+          <p class="form-desc">예시) https://snack24gd.imweb.me/service 에서 service를 넣으면 됩니다.</p>
           <input type="text" id="home-tab-pathname"/>
         </div>
-        <button onclick="handleChangeHomeCategory()">코드만들기</button>
+        <button class="line" onclick="handleChangeHomeCategory()">코드 생성하기</button>
       </div>
       <div class="module__code">
         <textarea id="result__4-2"></textarea>
-        <button onclick="handleCopy('4-2')">코드 복사</button>
+        <button onclick="handleCopy('4-2')">코드 복사하기</button>
       </div>
     </div>
 
     <hr />
 
     <div>
-      <h3 style="padding-bottom: 10px">디자인 모드 > 각 컨텐츠 설정에서 코드 영역에 넣으면 됩니다.</h3>
-      <p class="form-desc">여러개의 기능이 필요하다면 복사한 코드를 순서대로 이어서 붙여넣어주세요.</p>
+      <h3 style="padding-bottom: 10px">코드는 디자인 모드 > 각 컨텐츠의 설정창에서 [코드] 영역에 넣으면 됩니다.</h3>
+      <p class="form-desc">여러 개의 기능이 필요하다면 복사한 코드를 순서대로 이어 붙여 넣어주세요.</p>
       <img src="./assets/desc.png" style="width: 80%;">
     </div>
   </div>
