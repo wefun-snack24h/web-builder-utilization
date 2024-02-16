@@ -294,7 +294,7 @@
       // 관리자 페이지에서 페이지 이동
       if (wefunInfo && wefunInfo.route === '관리자페이지') {
         const openLink = 'https://www.snack24h.com/pc/admin/featpaper/service?url='
-            + url + '&' + _.WEFUN.getUtmTags();
+            + url
         _.WEFUN.handleOpenInNewTab(openLink)
       }
       // 관리자 페이지가 아닌 경우
@@ -302,7 +302,6 @@
         // LNB: 법인세 비용 절감
         if (url.includes('donation24.imweb.me')) {
           const href = 'https://snack24gd.imweb.me/?category_name=donation24'
-              + '&' + _.WEFUN.getUtmTags()
           _.WEFUN.handleMessage.sendMessage(window.parent,
               {href, key: 'wefun_tabPanelContents'})
           return;
@@ -310,8 +309,7 @@
 
         // LNB: 친환경 컵 150원
         if (url.includes('eco24h.imweb.me')) {
-          const href = 'https://snack24gd.imweb.me/?category_name=eco24' + '&'
-              + _.WEFUN.getUtmTags()
+          const href = 'https://snack24gd.imweb.me/?category_name=eco24'
           _.WEFUN.handleMessage.sendMessage(window.parent,
               {href, key: 'wefun_tabPanelContents'})
           return;
@@ -321,7 +319,6 @@
         const pathname = new URL(url).pathname;
         const href = 'https://snack24gd.imweb.me/?category_name='
             + pathname.slice(pathname.lastIndexOf('/') + 1)
-            + '&' + _.WEFUN.getUtmTags(url.includes('home'))
 
         _.WEFUN.handleMessage.sendMessage(window.parent,
             {href, key: 'wefun_tabPanelContents'})
@@ -335,8 +332,7 @@
     handleChangeIframeSrc: function (iframeId, iframeSrc) {
       const iframe = document.getElementById(iframeId);
       if (iframe) {
-        iframe.src = iframeSrc + '?' + _.WEFUN.getUtmTags(
-            iframeSrc.includes('home'))
+        iframe.src = iframeSrc
       }
     },
     /**
