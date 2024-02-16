@@ -42,8 +42,7 @@
      */
     handleMessage: {
       /**
-       * 타겟 윈도우에게 500ms 간격으로 메시지를 보낸다 (frame script가 생성되기 전 메시지를 보내면 받을 수가 없기 때문에 지속적으로 보냄)
-       * 메시지를 받은 frame은 sendReturnMessage 를 보내어 받았음을 안내
+       * 메시지 전송 함수
        * @param {Window | globalThis} targetWindow 메시지를 보낼 타겟 윈도우 (부모: window.parent / 자식: document.querySelector('iframe').contentWindow)
        * @param {object | any} message key는 필수속성으로 넣어주어야 함, 그 외 필요한 정보 추가
        * @param {string} origin 수신받을 도메인 정보 (가급적 입력해주는 것이 좋음)
@@ -261,7 +260,7 @@
       // 관리자 페이지에서 페이지 이동
       if (wefunInfo && wefunInfo.route === '관리자페이지') {
         const openLink = 'https://www.snack24h.com/pc/admin/featpaper/service?url='
-            + url;
+            + url + '&' + _.WEFUN.getUtmTags();
         _.WEFUN.handleOpenInNewTab(openLink)
       }
       // 관리자 페이지가 아닌 경우
