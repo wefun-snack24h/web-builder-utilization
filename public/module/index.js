@@ -236,8 +236,6 @@
       let changeOriginTags = []
       // originCreateTrigger 가 false 일 때, origin tags 그대로 저장
       let originTags = []
-      // 그 외 tags
-      let params = []
 
       const searchParams = new URL(window.location).searchParams
       searchParams.forEach((paramValue, paramKey) => {
@@ -248,13 +246,8 @@
         } else if (paramKey.includes('utm')) {
           changeOriginTags.push(
               'origin_' + paramKey.replace('utm_', '') + '=' + paramValue)
-        } else {
-          params.push(paramKey + '=' + paramValue)
         }
       })
-
-      // 기존 params push
-      tags.push(...params)
 
       // origin 여부에 따라 origin tags 분기
       if (originCreateTrigger) {
