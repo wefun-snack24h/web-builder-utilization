@@ -216,7 +216,7 @@
       return argumentParams
     },
     /**
-     * utm tag 생성
+     * origin, utm tag 생성
      * @param inHome
      * @returns {string}
      */
@@ -226,21 +226,55 @@
       const tagInfo = wefunInfo?.route === '관리자페이지' ? 'fromportal'
           : 'websiteofficial'
 
-      const utmTags = [];
-      const tags = ['source', 'medium', 'campaign', 'term'];
-      for (let tag of tags) {
-        if (tag === 'medium') {
-          utmTags.push('utm_' + tag + '=' + (inHome ? 'home' : tagInfo));
-        } else {
-          utmTags.push('utm_' + tag + '=' + tagInfo);
-        }
+      // return tags
+      const tags = []
 
-        if (localStorage.getItem('origin_' + tag)) {
-          utmTags.push(
-              'origin_' + tag + '=' + localStorage.getItem('origin_' + tag));
+      // origin 생성 trigger
+      let originCreateTrigger = true
+
+      // originCreateTrigger 가 true 일 때, utm을 origin으로 변경할 tags
+      let changeOriginTags = []
+      // originCreateTrigger 가 false 일 때, origin tags 그대로 저장
+      let originTags = []
+      // 그 외 tags
+      let params = []
+
+      const searchParams = new URL(window.location).searchParams
+      searchParams.forEach((paramValue, paramKey) => {
+        // params 에 origin key를 가지고 있으므로 trigger false
+        if (paramKey.includes('origin')) {
+          originCreateTrigger = false
+          originTags.push(paramKey + '=' + paramValue)
+        } else if (paramKey.includes('utm')) {
+          changeOriginTags.push(
+              'origin_' + paramKey.replace('utm_', '') + '=' + paramValue)
+        } else {
+          params.push(paramKey + '=' + paramValue)
+        }
+      })
+
+      // 기존 params push
+      tags.push(...params)
+
+      // origin 여부에 따라 origin tags 분기
+      if (originCreateTrigger) {
+        tags.push(...changeOriginTags)
+      } else {
+        tags.push(...originTags)
+      }
+
+      // 생성할 utm tags
+      const tagTypes = ['source', 'medium', 'campaign', 'term']
+
+      for (let tag of tagTypes) {
+        if (tag === 'medium') {
+          tags.push('utm_' + tag + '=' + (inHome ? 'home' : tagInfo))
+        } else {
+          tags.push('utm_' + tag + '=' + tagInfo)
         }
       }
-      return utmTags.join('&');
+
+      return tags.join('&')
     }
   }
 
