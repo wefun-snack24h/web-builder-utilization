@@ -237,7 +237,8 @@
       // originCreateTrigger 가 false 일 때, origin tags 그대로 저장
       let originTags = []
 
-      const searchParams = new URL(window.location).searchParams
+      // TODO: 여기 document.referrer로 변경
+      const searchParams = document.referrer === '' ? new URL(location.href).searchParams : new URL(document.referrer).searchParams
       searchParams.forEach((paramValue, paramKey) => {
         // params 에 origin key를 가지고 있으므로 trigger false
         if (paramKey.includes('origin')) {
