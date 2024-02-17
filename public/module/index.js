@@ -326,7 +326,7 @@
     handleChangeIframeSrc: function (iframeId, iframeSrc) {
       const iframe = document.getElementById(iframeId);
       if (iframe) {
-        iframe.src = iframeSrc
+        iframe.src = iframeSrc + _.WEFUN.getUtmTags(iframeSrc.includes('home'))
       }
     },
     /**
