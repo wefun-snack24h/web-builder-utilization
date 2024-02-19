@@ -251,9 +251,6 @@
         }
       })
 
-      // Case 1을 처리하기 위한 조건 처리
-      if (!isExistOrigin && isFromExternalSite) isFromExternalSite = false
-
       const tags = []
       // Case 2, Case 3
       if ((!isFromExternalSite && !isSameDomain) || isExistOrigin) {
