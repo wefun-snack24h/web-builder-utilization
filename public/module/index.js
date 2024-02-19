@@ -256,7 +256,7 @@
 
       const tags = []
       // Case 2, Case 3
-      if (!isFromExternalSite && !isSameDomain) {
+      if ((!isFromExternalSite && !isSameDomain) || isExistOrigin) {
         if (isExistOrigin) {
           tags.push(...originTags)
         } else {
