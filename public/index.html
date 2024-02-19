@@ -1,408 +1,496 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>웹 빌더 코드 생성</title>
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-    }
+<meta charset="UTF-8">
+<title>웹 빌더 코드 생성</title>
+<style>
+  * {
+    margin: 0;
+    padding: 0;
+  }
 
-    .modules {
-      max-width: 1100px;
-      min-height: 100vh;
-      margin: 0 auto;
-      display: flex;
-      flex-flow: column;
-      row-gap: 35px;
-      padding: 70px 0 50px;
-    }
+  .modules {
+    max-width: 1100px;
+    min-height: 100vh;
+    margin: 0 auto;
+    display: flex;
+    flex-flow: column;
+    row-gap: 35px;
+    padding: 70px 0 50px;
+  }
 
-    .module {
-      display: flex;
-      width: 100%;
-      column-gap: 20px;
-    }
+  .module {
+    display: flex;
+    width: 100%;
+    column-gap: 20px;
+  }
 
-    .module__form {
-      display: flex;
-      width: 45%;
-      flex-direction: column;
-      gap: 25px;
-    }
+  .module__form {
+    display: flex;
+    width: 45%;
+    flex-direction: column;
+    gap: 25px;
+  }
 
-    .module__code {
-      flex: 1;
-      display: flex;
-      justify-content: center;
-      flex-flow: column;
-    }
+  .module__code {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    flex-flow: column;
+  }
 
-    .form-label {
-      display: inline-block;
-      font-weight: 700;
-      padding-bottom: 5px;
-    }
+  .form-label {
+    display: inline-block;
+    font-weight: 700;
+    padding-bottom: 5px;
+  }
 
-    .form-desc {
-      font-size: 14px;
-      color: #8f8f8f;
-      padding-bottom: 7px;
-    }
+  .form-desc {
+    font-size: 14px;
+    color: #8f8f8f;
+    padding-bottom: 7px;
+  }
 
-    .form-label-wrap {
-      display: flex;
-      align-items: center;
-    }
+  .form-label-wrap {
+    display: flex;
+    align-items: center;
+  }
 
-    strong {
-      display: block;
-      padding-bottom: 5px;
-    }
+  strong {
+    display: block;
+    padding-bottom: 5px;
+  }
 
-    button {
-      padding: 5px;
-      background-color: rgba(2, 117, 255, 0.8);
-      border: none;
-      min-height: 40px;
-      color: #fff;
-      font-weight: 700;
-      font-size: 14px;
-      cursor: pointer;
-    }
+  button {
+    padding: 5px;
+    background-color: rgba(2, 117, 255, 0.8);
+    border: none;
+    min-height: 40px;
+    color: #fff;
+    font-weight: 700;
+    font-size: 14px;
+    cursor: pointer;
+  }
 
-    button.line {
-      background-color: #fff;
-      border: 1px solid #0275ff;
-      color: #0275ff;
-      border-radius: 8px;
-    }
+  button.line {
+    background-color: #fff;
+    border: 1px solid #0275ff;
+    color: #0275ff;
+    border-radius: 8px;
+  }
 
-    button:hover {
-      background-color: rgba(2, 117, 255, 0.9);
-    }
+  button:hover {
+    background-color: rgba(2, 117, 255, 0.9);
+  }
 
-    button:active {
-      background-color: rgba(2, 117, 255, 1);
-    }
+  button:active {
+    background-color: rgba(2, 117, 255, 1);
+  }
 
-    button.line:hover {
-      background-color: rgba(2, 117, 255, 0.05);
-    }
+  button.line:hover {
+    background-color: rgba(2, 117, 255, 0.05);
+  }
 
-    button.line:active {
-      background-color: rgba(2, 117, 255, 0.1);
-    }
+  button.line:active {
+    background-color: rgba(2, 117, 255, 0.1);
+  }
 
-    textarea {
-      resize: none;
-      height: 100%;
-      border-bottom: none;
-      padding: 10px;
-    }
+  textarea {
+    resize: none;
+    height: 100%;
+    border-bottom: none;
+    padding: 10px;
+  }
 
-    input[type=text] {
-      width: calc(100% - 25px);
-      height: 30px;
-      padding: 0 10px;
-    }
+  input[type=text] {
+    width: calc(100% - 25px);
+    height: 30px;
+    padding: 0 10px;
+  }
 
-    h1 {
-      margin-bottom: 20px;
-    }
+  h1 {
+    margin-bottom: 20px;
+  }
 
-    h2 {
-      display: flex;
-      align-items: center;
-      font-size: 24px;
-      line-height: 26px;
-    }
+  h2 {
+    display: flex;
+    align-items: center;
+    font-size: 24px;
+    line-height: 26px;
+  }
 
-    h2::before {
-      content: '';
-      width: 5px;
-      height: 22px;
-      background-color: #0275ff;
-      border: 5px;
-      margin-right: 10px;
-    }
+  h2::before {
+    content: '';
+    width: 5px;
+    height: 22px;
+    background-color: #0275ff;
+    border: 5px;
+    margin-right: 10px;
+  }
 
-    hr {
-      margin: 60px 0;
-      color: #fff;
-      border: 1px;
-    }
+  hr {
+    margin: 60px 0;
+    color: #fff;
+    border: 1px;
+  }
 
-    hr.divider {
-      margin: 10px 0px;
-      border-width: 1px 0 0 0;
-      border-style: dashed;
-      border-color: #bbb;
-    }
+  hr.divider {
+    margin: 10px 0px;
+    border-width: 1px 0 0 0;
+    border-style: dashed;
+    border-color: #bbb;
+  }
 
-    label {
-      display: inline-block;
-      font-size: 15px;
-      padding-right: 8px;
-      padding-bottom: 5px;
-    }
+  label {
+    display: inline-block;
+    font-size: 15px;
+    padding-right: 8px;
+    padding-bottom: 5px;
+  }
 
-  </style>
+  .tagging-input-key {
+    width: 200px !important;
+  }
+
+  .tagging-input-wrap {
+    display: flex;
+    margin-bottom: 5px;
+    gap: 5px;
+  }
+
+</style>
 </head>
 <body>
 <div>
-  <div class="modules">
-    <h1>코드 생성하기 👾</h1>
-    <!-- tagging -->
-    <div class="module">
-      <div class="module__form">
-        <h2>GA</h2>
-        <div>
-          <strong>위치</strong>
-          <input type="radio" id="position-a" value="상단" name="position" checked/>
-          <label for="position-a">상단</label>
-          <input type="radio" id="position-b" value="메인" name="position"/>
-          <label for="position-b">메인</label>
-          <input type="radio" id="position-c" value="중간" name="position"/>
-          <label for="position-c">중간</label>
-          <input type="radio" id="position-d" value="플로팅" name="position"/>
-          <label for="position-d">플로팅</label>
-          <input type="radio" id="position-e" value="하단" name="position"/>
-          <label for="position-e">하단</label>
-        </div>
-        <div>
-          <strong>버튼명</strong>
-          <p class="form-desc">버튼명이 없는 경우 코드를 직접 수정하시면 됩니다.</p>
-          <input type="radio" id="button-a" value="무료 상담하기" name="button" checked/>
-          <label for="button-a">무료 상담하기</label>
-          <input type="radio" id="button-b" value="5초 만에 상담받기" name="button"/>
-          <label for="button-b">5초 만에 상담받기</label>
-          <input type="radio" id="button-d" value="무료 상담 신청" name="button"/>
-          <label for="button-d">무료 상담 신청</label>
-          <input type="radio" id="button-e" value="상담 신청하기" name="button"/>
-          <label for="button-e">상담 신청하기</label>
-          <br/>
-          <input type="radio" id="button-c" value="소개서 받기" name="button"/>
-          <label for="button-c">소개서 받기</label>
-        </div>
-        <div>
-          <span class="form-label">서비스명</span> <input type="text" id="service"/>
-        </div>
-        <div>
-          <span class="form-label">서브서비스명</span> <input type="text" id="sub-service"/>
-        </div>
-        <button class="line" onclick="handleCLickGtmTagging()">코드 생성하기</button>
+<div class="modules">
+  <h1>코드 생성하기 👾</h1>
+  <!-- tagging -->
+  <div class="module">
+    <div class="module__form">
+      <h2>GA</h2>
+      <div>
+        <strong>위치</strong>
+        <input type="radio" id="position-a" value="상단" name="position" checked/>
+        <label for="position-a">상단</label>
+        <input type="radio" id="position-b" value="메인" name="position"/>
+        <label for="position-b">메인</label>
+        <input type="radio" id="position-c" value="중간" name="position"/>
+        <label for="position-c">중간</label>
+        <input type="radio" id="position-d" value="플로팅" name="position"/>
+        <label for="position-d">플로팅</label>
+        <input type="radio" id="position-e" value="하단" name="position"/>
+        <label for="position-e">하단</label>
       </div>
-      <div class="module__code">
-        <textarea id="result__1"></textarea>
-        <button onclick="handleCopy('1')">코드 복사하기</button>
+      <div>
+        <strong>버튼명</strong>
+        <p class="form-desc">버튼명이 없는 경우 코드를 직접 수정하시면 됩니다.</p>
+        <input type="radio" id="button-a" value="무료 상담하기" name="button" checked/>
+        <label for="button-a">무료 상담하기</label>
+        <input type="radio" id="button-b" value="5초 만에 상담받기" name="button"/>
+        <label for="button-b">5초 만에 상담받기</label>
+        <input type="radio" id="button-d" value="무료 상담 신청" name="button"/>
+        <label for="button-d">무료 상담 신청</label>
+        <input type="radio" id="button-e" value="상담 신청하기" name="button"/>
+        <label for="button-e">상담 신청하기</label>
+        <br/>
+        <input type="radio" id="button-c" value="소개서 받기" name="button"/>
+        <label for="button-c">소개서 받기</label>
       </div>
+      <div>
+        <span class="form-label">서비스명</span> <input type="text" id="service"/>
+      </div>
+      <div>
+        <span class="form-label">서브서비스명</span> <input type="text" id="sub-service"/>
+      </div>
+      <button class="line" onclick="handleCLickGtmTagging()">코드 생성하기</button>
     </div>
-
-    <hr />
-
-    <!-- Tally -->
-    <div class="module">
-      <div class="module__form">
-        <h2>Tally</h2>
-        <div>
-          <span class="form-label">Tally Modal ID</span>
-          <input type="text" id="tally-url1"/>
-        </div>
-        <button class="line" onclick="handleClickOpenTally()">코드 생성하기</button>
-      </div>
-      <div class="module__code">
-        <textarea id="result__2-1"></textarea>
-        <button onclick="handleCopy('2-1')">코드 복사하기</button>
-      </div>
-    </div>
-
-    <hr class="divider">
-
-    <!-- Tally set data -->
-    <div class="module">
-      <div class="module__form">
-        <div>
-          <span class="form-label">Tally Modal ID</span>
-          <input type="text" id="tally-url2"/>
-        </div>
-        <div id="tally-set-data">
-          <div class="form-label-wrap">
-            <span class="form-label" style="flex: 1">삽입 데이터</span>
-            <button style="width: 100px" onclick="handleClickAdd()">추가</button>
-          </div>
-          <p class="form-desc">tally param 추가: 예) product_name=브라운 커피 1kg</p>
-          <input type="text" class="set-data"/>
-        </div>
-        <button class="line" onclick="handleClickOpenTallyAndSetData()">코드 생성하기</button>
-      </div>
-      <div class="module__code">
-        <textarea id="result__2-2"></textarea>
-        <button onclick="handleCopy('2-2')">코드 복사하기</button>
-      </div>
-    </div>
-
-    <hr />
-
-    <!-- open in new URL -->
-    <div class="module">
-      <div class="module__form">
-        <h2>URL</h2>
-        <div>
-          <span class="form-label">URL</span>
-          <p class="form-desc">입력한 URL이 새 창으로 열립니다.</p>
-          <input type="text" id="form__3-1"/>
-        </div>
-        <button class="line" onclick="handleClickOpenInNewTab('3-1')">코드 생성하기</button>
-      </div>
-      <div class="module__code">
-        <textarea id="result__3-1"></textarea>
-        <button onclick="handleCopy('3-1')">코드 복사하기</button>
-      </div>
-    </div>
-
-    <hr class="divider">
-
-    <!-- change link of current tab -->
-    <div class="module">
-      <div class="module__form">
-        <div>
-          <span class="form-label">URL</span>
-          <p class="form-desc">입력한 URL로 현재 창에서 페이지가 전환됩니다.</p>
-          <input type="text" id="form__3-2"/>
-        </div>
-        <button class="line" onclick="handleClickChangeLinkOfCurrentTab('3-2')">코드 생성하기</button>
-      </div>
-      <div class="module__code">
-        <textarea id="result__3-2"></textarea>
-        <button onclick="handleCopy('3-2')">코드 복사하기</button>
-      </div>
-    </div>
-
-    <hr />
-
-    <!-- handleClickUrl -->
-    <div class="module">
-      <div class="module__form">
-        <h2>Home</h2>
-        <div>
-          <span class="form-label">홈 카테고리(탭) 내 서비스 URL open</span>
-          <p class="form-desc">관리자 페이지에서는 새 창으로, 신규 서비스에서는 현재 창에서 페이지가 전환됩니다.</p>
-          <input type="text" id="new-service-url"/>
-        </div>
-        <button class="line" onclick="handleClickUrl()">코드 생성하기</button>
-      </div>
-      <div class="module__code">
-        <textarea id="result__4-1"></textarea>
-        <button onclick="handleCopy('4-1')">코드 복사하기</button>
-      </div>
-    </div>
-
-    <hr class="divider">
-
-    <!-- handleChangeHomeCategory -->
-    <div class="module">
-      <div class="module__form">
-        <div>
-          <span class="form-label">홈 카테고리(탭) 전환 pathname</span>
-          <p class="form-desc">예시) https://snack24gd.imweb.me/service 에서 service를 넣으면 됩니다.</p>
-          <input type="text" id="home-tab-pathname"/>
-        </div>
-        <button class="line" onclick="handleChangeHomeCategory()">코드 생성하기</button>
-      </div>
-      <div class="module__code">
-        <textarea id="result__4-2"></textarea>
-        <button onclick="handleCopy('4-2')">코드 복사하기</button>
-      </div>
-    </div>
-
-    <hr />
-
-    <div>
-      <h3 style="padding-bottom: 10px">코드는 디자인 모드 > 각 컨텐츠의 설정창에서 [코드] 영역에 넣으면 됩니다.</h3>
-      <p class="form-desc">여러 개의 기능이 필요하다면 복사한 코드를 순서대로 이어 붙여 넣어주세요.</p>
-      <img src="./assets/desc.png" style="width: 80%;">
+    <div class="module__code">
+      <textarea id="result__1"></textarea>
+      <button onclick="handleCopy('1')">코드 복사하기</button>
     </div>
   </div>
+
+  <hr class="divider">
+
+  <!-- Tagging set data -->
+  <div class="module">
+    <div class="module__form">
+      <div>
+        <span class="form-label">Tagging 이벤트명</span>
+        <input type="text" id="tagging-id"/>
+      </div>
+      <div>
+        <span class="form-label">Tagging 액션명</span>
+        <input type="text" id="tagging-action"/>
+      </div>
+      <div id="tagging-set-data">
+        <div class="form-label-wrap">
+          <span class="form-label" style="flex: 1">삽입할 tagging 데이터</span>
+          <button style="width: 100px" onclick="handleClickAddTagging()">추가</button>
+        </div>
+        <p class="form-desc">빈 값인 경우 삽입되지 않습니다.</p>
+        <div class="tagging-input-wrap">
+          <input type="text" class="tagging-input-key" placeholder="수집할 이벤트 명"/>
+          <input type="text" class="tagging-input-value" placeholder="수집할 값" />
+        </div>
+      </div>
+      <button class="line" onclick="handleClickOpenTaggingAndSetData()">코드 생성하기</button>
+    </div>
+    <div class="module__code">
+      <textarea id="result__1-2"></textarea>
+      <button onclick="handleCopy('1-2')">코드 복사하기</button>
+    </div>
+  </div>
+
+  <hr />
+
+  <!-- Tally -->
+  <div class="module">
+    <div class="module__form">
+      <h2>Tally</h2>
+      <div>
+        <span class="form-label">Tally Modal ID</span>
+        <input type="text" id="tally-url1"/>
+      </div>
+      <button class="line" onclick="handleClickOpenTally()">코드 생성하기</button>
+    </div>
+    <div class="module__code">
+      <textarea id="result__2-1"></textarea>
+      <button onclick="handleCopy('2-1')">코드 복사하기</button>
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <!-- Tally set data -->
+  <div class="module">
+    <div class="module__form">
+      <div>
+        <span class="form-label">Tally Modal ID</span>
+        <input type="text" id="tally-url2"/>
+      </div>
+      <div id="tally-set-data">
+        <div class="form-label-wrap">
+          <span class="form-label" style="flex: 1">삽입 데이터</span>
+          <button style="width: 100px" onclick="handleClickAdd()">추가</button>
+        </div>
+        <p class="form-desc">tally param 추가: 예) product_name=브라운 커피 1kg</p>
+        <input type="text" class="set-data"/>
+      </div>
+      <button class="line" onclick="handleClickOpenTallyAndSetData()">코드 생성하기</button>
+    </div>
+    <div class="module__code">
+      <textarea id="result__2-2"></textarea>
+      <button onclick="handleCopy('2-2')">코드 복사하기</button>
+    </div>
+  </div>
+
+  <hr />
+
+  <!-- open in new URL -->
+  <div class="module">
+    <div class="module__form">
+      <h2>URL</h2>
+      <div>
+        <span class="form-label">URL</span>
+        <p class="form-desc">입력한 URL이 새 창으로 열립니다.</p>
+        <input type="text" id="form__3-1"/>
+      </div>
+      <button class="line" onclick="handleClickOpenInNewTab('3-1')">코드 생성하기</button>
+    </div>
+    <div class="module__code">
+      <textarea id="result__3-1"></textarea>
+      <button onclick="handleCopy('3-1')">코드 복사하기</button>
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <!-- change link of current tab -->
+  <div class="module">
+    <div class="module__form">
+      <div>
+        <span class="form-label">URL</span>
+        <p class="form-desc">입력한 URL로 현재 창에서 페이지가 전환됩니다.</p>
+        <input type="text" id="form__3-2"/>
+      </div>
+      <button class="line" onclick="handleClickChangeLinkOfCurrentTab('3-2')">코드 생성하기</button>
+    </div>
+    <div class="module__code">
+      <textarea id="result__3-2"></textarea>
+      <button onclick="handleCopy('3-2')">코드 복사하기</button>
+    </div>
+  </div>
+
+  <hr />
+
+  <!-- handleClickUrl -->
+  <div class="module">
+    <div class="module__form">
+      <h2>Home</h2>
+      <div>
+        <span class="form-label">홈 카테고리(탭) 내 서비스 URL open</span>
+        <p class="form-desc">관리자 페이지에서는 새 창으로, 신규 서비스에서는 현재 창에서 페이지가 전환됩니다.</p>
+        <input type="text" id="new-service-url"/>
+      </div>
+      <button class="line" onclick="handleClickUrl()">코드 생성하기</button>
+    </div>
+    <div class="module__code">
+      <textarea id="result__4-1"></textarea>
+      <button onclick="handleCopy('4-1')">코드 복사하기</button>
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <!-- handleChangeHomeCategory -->
+  <div class="module">
+    <div class="module__form">
+      <div>
+        <span class="form-label">홈 카테고리(탭) 전환 pathname</span>
+        <p class="form-desc">예시) https://snack24gd.imweb.me/service 에서 service를 넣으면 됩니다.</p>
+        <input type="text" id="home-tab-pathname"/>
+      </div>
+      <button class="line" onclick="handleChangeHomeCategory()">코드 생성하기</button>
+    </div>
+    <div class="module__code">
+      <textarea id="result__4-2"></textarea>
+      <button onclick="handleCopy('4-2')">코드 복사하기</button>
+    </div>
+  </div>
+
+  <hr />
+
+  <div>
+    <h3 style="padding-bottom: 10px">코드는 디자인 모드 > 각 컨텐츠의 설정창에서 [코드] 영역에 넣으면 됩니다.</h3>
+    <p class="form-desc">여러 개의 기능이 필요하다면 복사한 코드를 순서대로 이어 붙여 넣어주세요.</p>
+    <img src="./assets/desc.png" style="width: 80%;">
+  </div>
+</div>
 </div>
 
 <script>
-  function handleCopy(id) {
-    window.navigator.clipboard.writeText(`${document.getElementById(`result__${id}`).value}`)
-  }
+function handleCopy(id) {
+  window.navigator.clipboard.writeText(`${document.getElementById(`result__${id}`).value}`)
+}
 
-  function handleCLickGtmTagging() {
-    const service = document.getElementById("service").value
-    const sub_service = document.getElementById("sub-service").value
-    const select_position = document.querySelector('input[name="position"]:checked').value
-    const select_button = document.querySelector('input[name="button"]:checked').value
+function handleCLickGtmTagging() {
+  const service = document.getElementById("service").value
+  const sub_service = document.getElementById("sub-service").value
+  const select_position = document.querySelector('input[name="position"]:checked').value
+  const select_button = document.querySelector('input[name="button"]:checked').value
 
-    const text = `javascript: WEFUN.handleGtmTagging('beta_service', {
+  const text = `javascript: WEFUN.handleGtmTagging('beta_service', {
   'action': 'button',
   'serviceName': '${service}',
   'serviceSubName': '${sub_service}',
   'position': '${select_position}',
   'buttonName': '${select_button}'
 });`
-    document.getElementById("result__1").value = text
-  }
+  document.getElementById("result__1").value = text
+}
 
-  function handleClickOpenInNewTab(id) {
-    const text = `javascript: WEFUN.handleOpenInNewTab('${document.getElementById(
-        `form__${id}`).value}');`
-    document.getElementById(`result__${id}`).value = text
-  }
+function handleClickOpenInNewTab(id) {
+  const text = `javascript: WEFUN.handleOpenInNewTab('${document.getElementById(
+      `form__${id}`).value}');`
+  document.getElementById(`result__${id}`).value = text
+}
 
-  function handleClickChangeLinkOfCurrentTab(id) {
-    const text = `javascript: WEFUN.handleChangeLinkOfCurrentTab('${document.getElementById(
-        `form__${id}`).value}');`
-    document.getElementById(`result__${id}`).value = text
-  }
+function handleClickChangeLinkOfCurrentTab(id) {
+  const text = `javascript: WEFUN.handleChangeLinkOfCurrentTab('${document.getElementById(
+      `form__${id}`).value}');`
+  document.getElementById(`result__${id}`).value = text
+}
 
-  function handleClickOpenTally() {
-    const tally_url = document.getElementById('tally-url1').value
-    const text = `javascript: WEFUN.handleTally.openTally('${tally_url}');`
-    document.getElementById('result__2-1').value = text
-  }
+function handleClickOpenTally() {
+  const tally_url = document.getElementById('tally-url1').value
+  const text = `javascript: WEFUN.handleTally.openTally('${tally_url}');`
+  document.getElementById('result__2-1').value = text
+}
 
-  function handleClickOpenTallyAndSetData() {
-    const tally_url = document.getElementById('tally-url2').value
-    const inputs = document.getElementsByClassName('set-data')
-    let valueText = `'${tally_url}'`
-    for (let i = 0; i < inputs.length; i++) {
-      const text = inputs[i].value
-      if (text.trim()) {
-        valueText += `, '${text}'`
+function handleClickOpenTaggingAndSetData() {
+  const keyInputs = document.getElementsByClassName('tagging-input-key')
+  const valueInputs = document.getElementsByClassName('tagging-input-value')
+  const taggingId = document.getElementById('tagging-id').value
+  const taggingAction = document.getElementById('tagging-action').value
+  let valueText = []
+  for (let i = 0; i < keyInputs.length; i++) {
+    const key = keyInputs[i].value
+    const value = valueInputs[i].value
+    if (key.trim() && value.trim()) {
+      console.log(keyInputs.length === i - 1);
+      if (keyInputs.length === i+1) {
+        valueText += `  '${key}': '${value}'`
+      } else {
+        valueText += `  '${key}': '${value}',\n`
       }
     }
-    const text = `javascript: WEFUN.handleTally.openTallyAndSetData(${valueText});`
-    document.getElementById('result__2-2').value = text
   }
+  const text = `javascript: WEFUN.handleTally.handleGtmTagging('${taggingId}', {
+  'action': '${taggingAction}',
+${valueText}
+});`
+  document.getElementById('result__1-2').value = text
+}
 
-  function handleClickUrl() {
-    const service_url = document.getElementById('new-service-url').value
-    const text = `javascript: WEFUN_HOME.handleClickUrl('${service_url}');`
-    document.getElementById('result__4-1').value = text
+function handleClickOpenTallyAndSetData() {
+  const tally_url = document.getElementById('tally-url2').value
+  const inputs = document.getElementsByClassName('set-data')
+  let valueText = `'${tally_url}'`
+  for (let i = 0; i < inputs.length; i++) {
+    const text = inputs[i].value
+    if (text.trim()) {
+      valueText += `, '${text}'`
+    }
   }
+  const text = `javascript: WEFUN.handleTally.openTallyAndSetData(${valueText});`
+  document.getElementById('result__2-2').value = text
+}
 
-  function handleChangeHomeCategory() {
-    const tab_pathname = document.getElementById('home-tab-pathname').value
-    const text = `javascript: WEFUN_HOME.handleChangeHomeCategory('${tab_pathname}');`
-    document.getElementById('result__4-2').value = text
-  }
+function handleClickUrl() {
+  const service_url = document.getElementById('new-service-url').value
+  const text = `javascript: WEFUN_HOME.handleClickUrl('${service_url}');`
+  document.getElementById('result__4-1').value = text
+}
 
-  let id = 1;
+function handleChangeHomeCategory() {
+  const tab_pathname = document.getElementById('home-tab-pathname').value
+  const text = `javascript: WEFUN_HOME.handleChangeHomeCategory('${tab_pathname}');`
+  document.getElementById('result__4-2').value = text
+}
 
-  function handleClickAdd() {
-    const parent = document.getElementById(`tally-set-data`);
+let id = 1;
 
-    const input = document.createElement('input');
-    input.type = 'text'
-    input.classList.add('set-data')
+function handleClickAddTagging() {
+  const parent = document.getElementById(`tagging-set-data`);
 
-    parent.appendChild(input)
-  }
+  const wrapper = document.createElement('div')
+  wrapper.classList.add("tagging-input-wrap")
+
+  const keyInput = document.createElement('input');
+  keyInput.type = 'text'
+  keyInput.classList.add('tagging-input-key')
+  keyInput.placeholder = '수집할 이벤트 명'
+
+  const valueInput = document.createElement('input');
+  valueInput.type = 'text'
+  valueInput.classList.add('tagging-input-value')
+  valueInput.placeholder = '수집할 값'
+
+  wrapper.appendChild(keyInput)
+  wrapper.appendChild(valueInput)
+  parent.appendChild(wrapper)
+}
+
+function handleClickAdd() {
+  const parent = document.getElementById(`tally-set-data`);
+
+  const input = document.createElement('input');
+  input.type = 'text'
+  input.classList.add('set-data')
+
+  parent.appendChild(input)
+}
 </script>
 </body>
 </html>
