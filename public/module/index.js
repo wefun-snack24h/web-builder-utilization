@@ -224,41 +224,46 @@
       const wefunInfo = _.WEFUN.handleMessage.getMessageInSessionStorage('wefun_info')
       const tagInfo = wefunInfo?.route === '관리자페이지' ? 'fromportal' : 'websiteofficial'
 
-      let isExistOrigin = false // origin을 생성해야하는지 여부
-      let isFromExternalSite = false // 외부사이트에서 접속했는지 여부
-
-      let changeOriginTags = [] // originCreateTrigger 가 true 일 때, utm을 origin으로 변경할 tags
-      let originTags = [] // originCreateTrigger 가 false 일 때, origin tags 그대로 저장
-      let utmTags = []
+      // 외부에서 접근했는지 검사
+      let isFromWefunUrl = false
+      if (document.referrer) {
+        const WefunUrlList = ['wefun-corpa', 'wefun-corp', 'wefuncorp', 'snack24h', 'snack24gd']
+        isFromWefunUrl = WefunUrlList.find((obj) => new URL(document.referrer).host.includes(obj))
+      }
 
       const currentURL = new URL(location.href)
       const referrerURL = document.referrer && new URL(document.referrer)
-      const targetURL = referrerURL ? referrerURL : currentURL
-      const isSameDomain = targetURL && `${targetURL.origin + targetURL.pathname}` === `${currentURL.origin + currentURL.pathname}`
+      const targetURL = isFromWefunUrl ? referrerURL : currentURL
 
-      // [Case 1] utm만 존재하는 경우 (=광고, 블로그 등에서 넘어오는 경우)
-      // [Case 2] utm + origin이 존재하는 경우
-      // [Case 3] queryString이 존재하지 않는 경우 (=처음 진입한 경우, 링크를 통해 접속한 경우)
+      let isExistOrigin = false // origin tag가 존재하는지 여부
+      let isExistUtm = false // utm tag가 존재하는지 여부
+      let changeOriginTags = [] // originCreateTrigger 가 true 일 때, utm을 origin으로 변경할 tags
+
+      let originTags = [] // originCreateTrigger 가 false 일 때, origin tags 그대로 저장
+      let utmTags = []
       targetURL.searchParams.forEach((paramValue, paramKey) => {
         if (paramKey.includes('origin')) {
           isExistOrigin = true
           originTags.push(paramKey + '=' + paramValue)
         }
         else if (paramKey.includes('utm')) {
-          isFromExternalSite = true
+          isExistUtm = true
           changeOriginTags.push('origin_' + paramKey.replace('utm_', '') + '=' + paramValue)
           utmTags.push(`${paramKey}=${paramValue}`)
         }
       })
 
+      /**
+       * [Case 1] utm만 존재하는 경우 (=광고, 블로그 등에서 넘어오는 경우)
+       * [Case 2] utm과 origin이 존재하는 경우 (=origin이 이미 생성된 경우)
+       * [Case 3] query string이 존재하지 않는 경우 (=처음 진입한 경우, 링크를 통해 접속한 경우)
+       * */
       const tags = []
+      const isSameDomain = targetURL && `${targetURL.origin + targetURL.pathname}` === `${currentURL.origin + currentURL.pathname}`
+
       // Case 2, Case 3
-      if ((!isFromExternalSite && !isSameDomain) || isExistOrigin) {
-        if (isExistOrigin) {
-          tags.push(...originTags)
-        } else {
-          tags.push(...changeOriginTags)
-        }
+      if ((!isSameDomain && isFromWefunUrl) || isExistOrigin || (targetURL && !isExistUtm)) {
+        isExistOrigin ? tags.push(...originTags) : tags.push(...changeOriginTags)
 
         const tagTypes = ['source', 'medium', 'campaign', 'term'] // 생성할 utm tags
         for (let tag of tagTypes) {
