@@ -221,50 +221,61 @@
      * @returns {string}
      */
     getUtmTags: function (inHome = false) {
-      const wefunInfo = _.WEFUN.handleMessage.getMessageInSessionStorage(
-          'wefun_info')
-      const tagInfo = wefunInfo?.route === '관리자페이지' ? 'fromportal'
-          : 'websiteofficial'
+      const wefunInfo = _.WEFUN.handleMessage.getMessageInSessionStorage('wefun_info')
+      const tagInfo = wefunInfo?.route === '관리자페이지' ? 'fromportal' : 'websiteofficial'
 
-      // return tags
-      const tags = []
+      let isExistOrigin = false // origin을 생성해야하는지 여부
+      let isFromExternalSite = false // 외부사이트에서 접속했는지 여부
 
-      // origin 생성 trigger
-      let originCreateTrigger = true
+      let changeOriginTags = [] // originCreateTrigger 가 true 일 때, utm을 origin으로 변경할 tags
+      let originTags = [] // originCreateTrigger 가 false 일 때, origin tags 그대로 저장
+      let utmTags = []
 
-      // originCreateTrigger 가 true 일 때, utm을 origin으로 변경할 tags
-      let changeOriginTags = []
-      // originCreateTrigger 가 false 일 때, origin tags 그대로 저장
-      let originTags = []
+      const currentURL = new URL(location.href)
+      const referrerURL = document.referrer && new URL(document.referrer)
+      const targetURL = referrerURL ? referrerURL : currentURL
+      const isSameDomain = targetURL && `${targetURL.origin + targetURL.pathname}` === `${currentURL.origin + currentURL.pathname}`
 
-      const searchParams = document.referrer === '' ? new URL(location.href).searchParams : new URL(document.referrer).searchParams
-      searchParams.forEach((paramValue, paramKey) => {
-        // params 에 origin key를 가지고 있으므로 trigger false
+      // [Case 1] utm만 존재하는 경우 (=광고, 블로그 등에서 넘어오는 경우)
+      // [Case 2] utm + origin이 존재하는 경우
+      // [Case 3] queryString이 존재하지 않는 경우 (=처음 진입한 경우, 링크를 통해 접속한 경우)
+      targetURL.searchParams.forEach((paramValue, paramKey) => {
         if (paramKey.includes('origin')) {
-          originCreateTrigger = false
+          isExistOrigin = true
           originTags.push(paramKey + '=' + paramValue)
-        } else if (paramKey.includes('utm')) {
-          changeOriginTags.push(
-              'origin_' + paramKey.replace('utm_', '') + '=' + paramValue)
+        }
+        else if (paramKey.includes('utm')) {
+          isFromExternalSite = true
+          changeOriginTags.push('origin_' + paramKey.replace('utm_', '') + '=' + paramValue)
+          utmTags.push(`${paramKey}=${paramValue}`)
         }
       })
 
-      // origin 여부에 따라 origin tags 분기
-      if (originCreateTrigger) {
-        tags.push(...changeOriginTags)
-      } else {
-        tags.push(...originTags)
+      // Case 1을 처리하기 위한 조건 처리
+      if (!isExistOrigin && isFromExternalSite) isFromExternalSite = false
+
+      const tags = []
+      // Case 2, Case 3
+      if (!isFromExternalSite && !isSameDomain) {
+        if (isExistOrigin) {
+          tags.push(...originTags)
+        } else {
+          tags.push(...changeOriginTags)
+        }
+
+        const tagTypes = ['source', 'medium', 'campaign', 'term'] // 생성할 utm tags
+        for (let tag of tagTypes) {
+          if (tag === 'medium') {
+            tags.push('utm_' + tag + '=' + (inHome ? 'home' : tagInfo))
+          } else {
+            tags.push('utm_' + tag + '=' + tagInfo)
+          }
+        }
       }
 
-      // 생성할 utm tags
-      const tagTypes = ['source', 'medium', 'campaign', 'term']
-
-      for (let tag of tagTypes) {
-        if (tag === 'medium') {
-          tags.push('utm_' + tag + '=' + (inHome ? 'home' : tagInfo))
-        } else {
-          tags.push('utm_' + tag + '=' + tagInfo)
-        }
+      // Case 1
+      else {
+        tags.push(...utmTags)
       }
 
       return tags.join('&')
