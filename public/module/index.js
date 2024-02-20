@@ -246,8 +246,7 @@ _.WEFUN = {
       if (paramKey.includes('origin')) {
         isExistOrigin = true
         originTags.push(paramKey + '=' + paramValue)
-      }
-      else if (paramKey.includes('utm')) {
+      } else if (paramKey.includes('utm')) {
         isExistUtm = true
         changeOriginTags.push('origin_' + paramKey.replace('utm_', '') + '=' + paramValue)
         utmTags.push(`${paramKey}=${paramValue}`)
