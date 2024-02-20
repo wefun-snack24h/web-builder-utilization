@@ -222,7 +222,6 @@ _.WEFUN = {
    */
   getUtmTags: function (inHome = false) {
     const wefunInfo = _.WEFUN.handleMessage.getMessageInSessionStorage('wefun_info')
-    const tagInfo = wefunInfo?.route === '관리자페이지' ? 'fromportal' : 'websiteofficial'
 
     // 외부에서 접근했는지 검사
     let isFromWefunUrl = false
@@ -270,6 +269,7 @@ _.WEFUN = {
      * [Case 2] utm과 origin이 존재하는 경우 (=origin이 이미 생성된 경우)
      * [Case 3] query string이 존재하지 않는 경우 (=처음 진입한 경우, 링크를 통해 접속한 경우)
      * */
+    const tagInfo = wefunInfo?.route === '관리자페이지' ? 'fromportal' : isFromWefunUrl ? 'websiteofficial' : 'organic'
     const tags = []
     // Case 2, Case 3
     if ((!isSameDomain && isFromWefunUrl) || isExistOrigin || (targetURL && !isExistUtm)) {
