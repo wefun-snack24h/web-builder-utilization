@@ -257,6 +257,8 @@ _.WEFUN = {
     let isSameDomain = false
     if (targetURL) {
       const isSameHost = `${targetURL.origin + targetURL.pathname}` === `${currentURL.origin + currentURL.pathname}`
+
+      // 프레이머에서 상담 신청 및 완료 페이지에서 utm 생성 제외
       const isSameService = location.href.includes(`${targetURL.origin}/consulting${targetURL.pathname}`)
           || location.href.includes(`${targetURL.origin}/confirm${targetURL.pathname}`)
 
