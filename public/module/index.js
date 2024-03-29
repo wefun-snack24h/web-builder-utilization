@@ -216,6 +216,23 @@ _.WEFUN = {
     return argumentParams
   },
   /**
+   * search params 에 utm, origin 을 제외한 나머지 params 추출
+   * @param search
+   * @returns {string}
+   */
+  getSearchParamsExceptUtm: function (search) {
+    const searchParams = new URLSearchParams(search)
+    const currentParams = []
+
+    searchParams.forEach((paramValue, paramKey) => {
+      if (!paramKey.includes('utm') && !paramKey.includes('origin')) {
+        currentParams.push(`${paramKey}=${paramValue}`)
+      }
+    })
+
+    return currentParams.join("&")
+  },
+  /**
    * origin, utm tag 생성
    * @param inHome
    * @returns {string}
