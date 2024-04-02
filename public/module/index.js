@@ -32,6 +32,11 @@ const errorLog = (e) => {
   }
 }
 
+  /**
+   * utm, origin 을 가지고 있는지 확인
+   * @param {string} search
+   * @returns {boolean}
+   */
   const hasUtm = (search) => {
     const currentParams = new URLSearchParams(search)
     let isUtm = false
