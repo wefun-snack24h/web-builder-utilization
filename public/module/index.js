@@ -32,6 +32,17 @@ const errorLog = (e) => {
   }
 }
 
+  const hasUtm = (search) => {
+    const currentParams = new URLSearchParams(search)
+    let isUtm = false
+    currentParams.forEach((value, key) => {
+      if (key.includes('utm') || key.includes('origin')) {
+        isUtm = true
+      }
+    })
+    return isUtm
+  }
+
 /**
  * @module WEFUN
  * window.WEFUN 전역 객체
@@ -249,7 +260,8 @@ _.WEFUN = {
 
     const currentURL = new URL(location.href)
     const referrerURL = document.referrer && new URL(document.referrer)
-    const targetURL = isFromWefunUrl ? referrerURL : currentURL
+    const targetURL = isFromWefunUrl ? (hasUtm(referrerURL.search) ? referrerURL
+        : currentURL) : currentURL
 
     // tag 생성
     let isExistOrigin = false // origin tag가 존재하는지 여부
@@ -272,7 +284,8 @@ _.WEFUN = {
     // 같은 도메인인지 비교
     let isSameDomain = false
     if (targetURL) {
-      const isSameHost = `${targetURL.origin + targetURL.pathname}` === `${currentURL.origin + currentURL.pathname}`
+      const isSameHost = `${referrerURL.origin + referrerURL.pathname}`
+          === `${currentURL.origin + currentURL.pathname}`
 
       // 프레이머에서 상담 신청 및 완료 페이지에서 utm 생성 제외
       const isSameService = location.href.includes(`${targetURL.origin}/consulting${targetURL.pathname}`)
