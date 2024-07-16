@@ -259,7 +259,8 @@ _.WEFUN = {
     // 외부에서 접근했는지 검사
     let isFromWefunUrl = false
     if (document.referrer) {
-      const WefunUrlList = ['wefun-corpa', 'wefun-corp', 'wefuncorp', 'snack24h', 'snack24gd']
+      const WefunUrlList = ['wefun-corpa', 'wefun-corp', 'wefuncorp',
+        'snack24h', 'snack24gd', 'nextcoffeelab']
       isFromWefunUrl = WefunUrlList.find((obj) => new URL(document.referrer).host.includes(obj))
     }
 
