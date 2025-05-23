@@ -313,12 +313,17 @@
        * [Case 1] utm만 존재하는 경우 (=광고, 블로그 등에서 넘어오는 경우)
        * [Case 2] utm과 origin이 존재하는 경우 (=origin이 이미 생성된 경우)
        * [Case 3] query string이 존재하지 않는 경우 (=처음 진입한 경우, 링크를 통해 접속한 경우)
+       * [Case 4] utm과 origin이 모두 존재하지 않는 경우
        * */
       const tagInfo = wefunInfo?.route === '관리자페이지' ? 'fromportal'
           : isFromWefunUrl ? 'websiteofficial' : 'organic'
       const tags = []
+      // Case 4
+      if (!isExistUtm && !isExistOrigin) {
+        // 아무 동작도 하지 않음 (빈 값 리턴)
+      }
       // Case 2, Case 3
-      if ((!isSameDomain && isFromWefunUrl) || isExistOrigin || (targetURL
+      else if ((!isSameDomain && isFromWefunUrl) || isExistOrigin || (targetURL
           && !isExistUtm)) {
         isExistOrigin ? tags.push(...originTags) : tags.push(
             ...changeOriginTags)
