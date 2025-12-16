@@ -350,6 +350,8 @@
     /**
      * 입력받은 url로 페이지 링크 이동 (홈에서 클릭시)
      * @param {string} url 이동할 url
+     * @param {object} option 옵션
+     * @param {boolean} option.directInPortalHome 포탈 홈에서 바로 이동 여부
      */
     handleClickUrl: function (url, option) {
       const wefunInfo = _.WEFUN.handleMessage.getMessageInSessionStorage(
@@ -359,8 +361,8 @@
       if (wefunInfo && wefunInfo.route === '관리자페이지') {
         const openLink = 'https://www.snack24h.com/pc/admin/featpaper/service?url='
             + url;
-        if (option && option.direct === true) {
-          window.parent.location.href = openLink;
+        if (option && option.directInPortalHome === true) {
+          window.parent.parent.location.href = openLink;
           return;
         }
         _.WEFUN.handleOpenInNewTab(openLink)
