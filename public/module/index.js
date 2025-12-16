@@ -351,14 +351,18 @@
      * 입력받은 url로 페이지 링크 이동 (홈에서 클릭시)
      * @param {string} url 이동할 url
      */
-    handleClickUrl: function (url) {
+    handleClickUrl: function (url, option) {
       const wefunInfo = _.WEFUN.handleMessage.getMessageInSessionStorage(
           'wefun_info');
 
       // 관리자 페이지에서 페이지 이동
       if (wefunInfo && wefunInfo.route === '관리자페이지') {
         const openLink = 'https://www.snack24h.com/pc/admin/featpaper/service?url='
-            + url
+            + url;
+        if (option && option.direct === true) {
+          window.location.href = openLink;
+          return;
+        }
         _.WEFUN.handleOpenInNewTab(openLink)
       }
       // 관리자 페이지가 아닌 경우
