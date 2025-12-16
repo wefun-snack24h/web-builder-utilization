@@ -360,7 +360,7 @@
         const openLink = 'https://www.snack24h.com/pc/admin/featpaper/service?url='
             + url;
         if (option && option.direct === true) {
-          window.location.href = openLink;
+          window.parent.location.href = openLink;
           return;
         }
         _.WEFUN.handleOpenInNewTab(openLink)
