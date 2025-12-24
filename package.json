@@ -1,0 +1,14 @@
+{
+  "name": "web-builder-utilization",
+  "private": true,
+  "version": "0.0.0",
+  "description": "웹 빌더 모듈",
+  "scripts": {
+    "format": "prettier --write .",
+    "format:check": "prettier --check ."
+  },
+  "devDependencies": {
+    "prettier": "^3.6.2"
+  }
+}
+
