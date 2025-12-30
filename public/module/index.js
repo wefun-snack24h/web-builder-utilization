@@ -508,5 +508,40 @@
       // GET은 body가 없고, 불필요한 헤더는 CORS preflight를 유발할 수 있어 설정하지 않습니다.
       xhr.send();
     },
+
+    /**
+     * URL 뒤에 wefunInfo를 쿼리스트링으로 추가합니다.
+     * 기존 쿼리스트링이 있으면 병합됩니다.
+     * @param {string} url
+     * @param {object} [extraData] wefunInfo 외에 추가로 붙일 데이터
+     * @returns {string}
+     */
+    appendWefunInfoToUrl: function (url, extraData = {}) {
+      let wefunInfo = {};
+
+      if (
+        window._?.WEFUN?.handleMessage &&
+        typeof window._.WEFUN.handleMessage.getMessageInSessionStorage === 'function'
+      ) {
+        const stored = window._.WEFUN.handleMessage.getMessageInSessionStorage('wefun_info');
+        if (stored && typeof stored === 'object') {
+          wefunInfo = stored;
+        }
+      }
+
+      const mergedData = { ...wefunInfo, ...extraData };
+      const params = new URLSearchParams();
+
+      Object.keys(mergedData).forEach((key) => {
+        const value = mergedData[key];
+        if (value === undefined || value === null) return;
+        params.append(key, String(value));
+      });
+
+      const qs = params.toString();
+      if (!qs) return url;
+
+      return url + (url.includes('?') ? '&' : '?') + qs;
+    },
   };
 })(window);
